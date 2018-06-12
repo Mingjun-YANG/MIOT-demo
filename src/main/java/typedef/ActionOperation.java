@@ -11,8 +11,7 @@ public class ActionOperation extends AbstractOperation {
 
     public String did;
     public int siid;
-    public int piid;
-    public List<Object> in = new ArrayList<Object>();
+    public int aiid;
     public List<Object> out = new ArrayList<Object>();
     public static JSONArray argumentIn = new JSONArray();
 
@@ -21,7 +20,7 @@ public class ActionOperation extends AbstractOperation {
         try {
             action.did = o.getString("did");
             action.siid = o.getInt("siid");
-            action.piid = o.getInt("piid");
+            action.aiid = o.getInt("aiid");
             argumentIn = o.getJSONArray("in");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -38,7 +37,7 @@ public class ActionOperation extends AbstractOperation {
         try {
             o.put("did", this.did);
             o.put("siid", this.siid);
-            o.put("piid", this.piid);
+            o.put("aiid", this.aiid);
             o.put("status", this.status);
         } catch (JSONException e) {
             e.printStackTrace();

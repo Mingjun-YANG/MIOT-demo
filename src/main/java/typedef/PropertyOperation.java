@@ -44,14 +44,7 @@ public class PropertyOperation extends AbstractOperation {
 
     public JSONObject encodeGetPropertyResponse() {
         JSONObject o = new JSONObject();
-        try {
-            o.put("did", this.did);
-            o.put("siid", this.siid);
-            o.put("piid", this.piid);
-            o.put("status", this.status);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        o = toJSON(o);
         if (this.status == 0) {
             try {
                 o.put("value", this.value);
@@ -71,14 +64,7 @@ public class PropertyOperation extends AbstractOperation {
 
     public JSONObject encodeSetPropertyResponse() {
         JSONObject o = new JSONObject();
-        try {
-            o.put("did", this.did);
-            o.put("siid", this.siid);
-            o.put("piid", this.piid);
-            o.put("status", this.status);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        o = toJSON(o);
         if (this.status != 0) {
             try {
                 o.put("description", this.description);
@@ -87,6 +73,18 @@ public class PropertyOperation extends AbstractOperation {
             }
         }
 
+        return o;
+    }
+
+    private JSONObject toJSON(JSONObject o) {
+        try {
+            o.put("did", this.did);
+            o.put("siid", this.siid);
+            o.put("piid", this.piid);
+            o.put("status", this.status);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return o;
     }
 }
