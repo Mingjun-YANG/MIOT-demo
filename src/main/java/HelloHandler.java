@@ -81,6 +81,7 @@ public class HelloHandler extends AbstractHandler {
             buff1.append(st);
         }
         String body = buff1.toString();
+
         //To JSON
         try {
             JSONObject jsonObject = new JSONObject(body);
@@ -90,6 +91,7 @@ public class HelloHandler extends AbstractHandler {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         if (requestId == null) {
             response.setStatus(400);
             out = response.getWriter();
@@ -148,6 +150,7 @@ public class HelloHandler extends AbstractHandler {
                         response.setStatus(200);
                         out.println(obj);
                         break;
+
                     case 1:
                         try {
                             array = context.getJSONArray("properties");
@@ -163,6 +166,7 @@ public class HelloHandler extends AbstractHandler {
                             out.println(obj);
                         }
                         break;
+
                     case 2:
                         try {
                             array = context.getJSONArray("properties");
@@ -178,6 +182,7 @@ public class HelloHandler extends AbstractHandler {
                             out.println(obj);
                         }
                         break;
+
                     case 3:
                         try {
                             array = context.getJSONArray("action");
@@ -188,10 +193,7 @@ public class HelloHandler extends AbstractHandler {
                         response.setStatus(200);
                         out.println(obj);
                         break;
-                    default:
-                        response.setStatus(400);
-                        out = response.getWriter();
-                        out.println("intent invalid");
+
                     case 4:
                         try {
                             array = context.getJSONArray("devices");
@@ -202,6 +204,7 @@ public class HelloHandler extends AbstractHandler {
                         response.setStatus(200);
                         out.println(obj);
                         break;
+
                     case 5:
                         try {
                             array = context.getJSONArray("devices");
@@ -212,6 +215,7 @@ public class HelloHandler extends AbstractHandler {
                         response.setStatus(200);
                         out.println(obj);
                         break;
+
                     case 6:
                         try {
                             array = context.getJSONArray("devices");
@@ -246,6 +250,7 @@ public class HelloHandler extends AbstractHandler {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         JSONObject objreturn = new JSONObject();
         try {
             objreturn.put("intent", intent);
@@ -274,6 +279,7 @@ public class HelloHandler extends AbstractHandler {
         }
         list.forEach(property -> operation.get(property));
         List<JSONObject> result = list.stream().map(PropertyOperation::encodeGetPropertyResponse).collect(Collectors.toList());
+
         try {
             objreturn.put("requestId", requestId);
             objreturn.put("intent", intent);
@@ -303,6 +309,7 @@ public class HelloHandler extends AbstractHandler {
             this.operation.set(property);
         });
         List<JSONObject> result = list.stream().map(PropertyOperation::encodeSetPropertyResponse).collect(Collectors.toList());
+
         try {
             objreturn.put("requestId", requestId);
             objreturn.put("intent", intent);
@@ -331,6 +338,7 @@ public class HelloHandler extends AbstractHandler {
             this.operation.invoke(action1);
         });
         List<JSONObject> result = list.stream().map(ActionOperation::encodeResponse).collect(Collectors.toList());
+
         try {
             objreturn.put("requestId", requestId);
             objreturn.put("intent", intent);
@@ -358,6 +366,7 @@ public class HelloHandler extends AbstractHandler {
             this.subscribe.set(subscribe);
         });
         List<JSONObject> result = list.stream().map(SubscribeOperation::encodeSetSubscribeResponse).collect(Collectors.toList());
+
         try {
             objreturn.put("requestId", requestId);
             objreturn.put("intent", intent);
@@ -385,6 +394,7 @@ public class HelloHandler extends AbstractHandler {
             this.subscribe.unset(subscribe);
         });
         List<JSONObject> result = list.stream().map(SubscribeOperation::encodeSetSubscribeResponse).collect(Collectors.toList());
+
         try {
             objreturn.put("devices", new JSONArray(result));
             objreturn.put("intent", intent);
@@ -413,6 +423,7 @@ public class HelloHandler extends AbstractHandler {
             this.deviceStatus.get(deviceStatus);
         });
         List<JSONObject> result = list.stream().map(StatusOperation::encodeGetStatusResponse).collect(Collectors.toList());
+
         try {
             objreturn.put("requestId", requestId);
             objreturn.put("intent", intent);

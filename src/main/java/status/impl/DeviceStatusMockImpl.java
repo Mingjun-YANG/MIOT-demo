@@ -14,9 +14,10 @@ public class DeviceStatusMockImpl implements Status {
             deviceStatus.status = 0;
             deviceStatus.name = "whitee";
             deviceStatus.online = "true";
-        } else
+        } else {
             // 如果失败， status为负值，且携带description（见文档《第三方设备云接入小米IOT平台》）
             deviceStatus.status = -1;
-        deviceStatus.description = "invalid device Id";
+            deviceStatus.description = "invalid device Id";
+        }
     }
 }
