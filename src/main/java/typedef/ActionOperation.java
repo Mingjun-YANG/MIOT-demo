@@ -1,4 +1,5 @@
 package typedef;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,28 +36,27 @@ public class ActionOperation extends AbstractOperation {
     public JSONObject encodeResponse() {
         JSONObject o = new JSONObject();
         try {
-        o.put("did", this.did);
-        o.put("siid", this.siid);
-        o.put("piid", this.piid);
-        o.put("status", this.status);
+            o.put("did", this.did);
+            o.put("siid", this.siid);
+            o.put("piid", this.piid);
+            o.put("status", this.status);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         if (this.status == 0) {
             if (out.size() > 0) {
                 try {
-                o.put("out", new JSONArray(out));
+                    o.put("out", new JSONArray(out));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-        }
-        else {
-            try{
-            o.put("description", this.description);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        } else {
+            try {
+                o.put("description", this.description);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         return o;

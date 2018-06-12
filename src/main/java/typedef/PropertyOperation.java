@@ -20,9 +20,9 @@ public class PropertyOperation extends AbstractOperation {
     public static PropertyOperation decodeGetPropertyRequest(JSONObject o) {
         PropertyOperation property = new PropertyOperation();
         try {
-        property.did = o.getString("did");
-        property.siid = o.getInt("siid");
-        property.piid = o.getInt("piid");
+            property.did = o.getString("did");
+            property.siid = o.getInt("siid");
+            property.piid = o.getInt("piid");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -32,10 +32,10 @@ public class PropertyOperation extends AbstractOperation {
     public static PropertyOperation decodeSetPropertyRequest(JSONObject o) {
         PropertyOperation property = new PropertyOperation();
         try {
-        property.did = o.getString("did");
-        property.siid = o.getInt("siid");
-        property.piid = o.getInt("piid");
-        property.value = o.getInt("value");
+            property.did = o.getString("did");
+            property.siid = o.getInt("siid");
+            property.piid = o.getInt("piid");
+            property.value = o.getInt("value");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -49,22 +49,19 @@ public class PropertyOperation extends AbstractOperation {
             o.put("siid", this.siid);
             o.put("piid", this.piid);
             o.put("status", this.status);
-        }
-        catch (JSONException e) {
-                e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         if (this.status == 0) {
             try {
-            o.put("value", this.value);
+                o.put("value", this.value);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             try {
-            o.put("description", this.description);
-            }
-            catch (JSONException e) {
+                o.put("description", this.description);
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
@@ -75,20 +72,18 @@ public class PropertyOperation extends AbstractOperation {
     public JSONObject encodeSetPropertyResponse() {
         JSONObject o = new JSONObject();
         try {
-        o.put("did", this.did);
-        o.put("siid", this.siid);
-        o.put("piid", this.piid);
-        o.put("status", this.status);
-        }
-        catch (JSONException e) {
+            o.put("did", this.did);
+            o.put("siid", this.siid);
+            o.put("piid", this.piid);
+            o.put("status", this.status);
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         if (this.status != 0) {
             try {
-            o.put("description", this.description);
-            }
-            catch (JSONException e) {
-                    e.printStackTrace();
+                o.put("description", this.description);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
 

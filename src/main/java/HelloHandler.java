@@ -180,7 +180,7 @@ public class HelloHandler extends AbstractHandler {
                         break;
                     case 3:
                         try {
-                             array = context.getJSONArray("action");
+                            array = context.getJSONArray("action");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

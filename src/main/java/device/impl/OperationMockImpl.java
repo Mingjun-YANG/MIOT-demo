@@ -14,9 +14,9 @@ public class OperationMockImpl implements Operation {
         if (property.did.equals("AAAA")) {
             property.status = 0;
             property.value = 13;
-        }else
-        // 如果失败， status为负值，且携带description（见文档《第三方设备云接入小米IOT平台》）
-        property.status = -1;
+        } else
+            // 如果失败， status为负值，且携带description（见文档《第三方设备云接入小米IOT平台》）
+            property.status = -1;
         property.description = "did invalid";
     }
 
@@ -26,12 +26,12 @@ public class OperationMockImpl implements Operation {
         if (!property.did.equals("AAAA")) {
             property.status = -1;
             property.description = "did invalid";
-        }else if ((Integer)property.value > 100) {
+        } else if ((Integer) property.value > 100) {
             property.status = -10;
             property.description = "value out of range";
-        }else
-        // 如果成功， status=0
-        property.status = 0;
+        } else
+            // 如果成功， status=0
+            property.status = 0;
 
         // 如果失败， status为负值，且携带description（见文档《第三方设备云接入小米IOT平台》）
 
@@ -41,11 +41,11 @@ public class OperationMockImpl implements Operation {
     public void invoke(ActionOperation action) {
         // TODO: 执行方法
         if (!action.did.equals("AAAA")) {
-        // 如果失败， status为负值，且携带description（见文档《第三方设备云接入小米IOT平台》）
+            // 如果失败， status为负值，且携带description（见文档《第三方设备云接入小米IOT平台》）
             action.status = -1;
             action.description = "did invalid";
         } else
-        action.status = 0;
+            action.status = 0;
         // 如果此方法有返回值，需要正确填写返回值，如：
         action.out.add(19);
         action.out.add("beijing");

@@ -22,14 +22,14 @@ public class SubscribeOperation extends AbstractOperation {
         }
         return subscribe;
     }
+
     public JSONObject encodeSetSubscribeResponse() {
         JSONObject o = new JSONObject();
         try {
             o.put("did", this.did);
             o.put("subscriptionId", this.subscriptionId);
             o.put("status", this.status);
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         if (this.status != 0) {

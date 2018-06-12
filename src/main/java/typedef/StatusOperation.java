@@ -18,8 +18,7 @@ public class StatusOperation extends AbstractOperation {
         StatusOperation deviceStatus = new StatusOperation();
         try {
             deviceStatus.did = o.getString("did");
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return deviceStatus;
@@ -30,8 +29,7 @@ public class StatusOperation extends AbstractOperation {
         try {
             o.put("did", this.did);
             o.put("status", this.status);
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         if (this.status == 0) {
@@ -41,12 +39,10 @@ public class StatusOperation extends AbstractOperation {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             try {
                 o.put("description", this.description);
-            }
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
