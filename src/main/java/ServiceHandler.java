@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import oauth.OAuthValidator;
 import oauth.impl.OAuthValidatorMockImpl;
 import operater.DecodeOperater;
+import operater.HeaderValidator;
 import operater.ResponseOperater;
 import operater.ReturnObjectOperate;
 import status.Status;
@@ -38,7 +39,9 @@ public class ServiceHandler extends AbstractHandler {
     private Operation operation;
     private Subscribe subscribe;
     private DecodeOperater decodeOperater;
+    private HeaderValidator headerValidator;
     private Status deviceStatus;
+    private String uid;
 
     public ServiceHandler() {
         operation = new OperationMockImpl();
@@ -46,6 +49,7 @@ public class ServiceHandler extends AbstractHandler {
         subscribe = new SubscribeMockImpl();
         deviceStatus = new DeviceStatusMockImpl();
         decodeOperater = new DecodeOperater();
+        headerValidator = new HeaderValidator();
     }
 
     @Override
@@ -54,20 +58,11 @@ public class ServiceHandler extends AbstractHandler {
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
-        String User_Token = request.getHeader("User_Token");
-        Boolean validationResult = validator.validate(User_Token);
-        if (!validationResult) {
-            JSONObject objReturn = new JSONObject();
-            response.setStatus(401);
-            try {
-                objReturn.append("code", "-1");
-                objReturn.append("description", "xxxx");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            out.println(objReturn);
-            baseRequest.setHandled(true);
-            return;
+        String token = request.getHeader("User_Token");
+        try {
+            uid = validator.validate(token);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         BufferedReader reader = request.getReader();
         StringBuilder buff1 = new StringBuilder();
@@ -76,7 +71,6 @@ public class ServiceHandler extends AbstractHandler {
             buff1.append(st);
         }
         String body = buff1.toString();
-
         //To JSON
         try {
             context = new JSONObject(body);
@@ -85,7 +79,9 @@ public class ServiceHandler extends AbstractHandler {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        if (!headerValidator.headerValidator(response, requestId, intent)) {
+            return;
+        }
         if (requestId == null) {
             response.setStatus(400);
             out = response.getWriter();
@@ -220,12 +216,14 @@ public class ServiceHandler extends AbstractHandler {
         JSONArray array = new JSONArray();
         JSONObject obj1 = new JSONObject();
         JSONObject obj2 = new JSONObject();
+
         try {
 
             obj1.put("did", "1001");
             obj1.put("name", "whitee");
             obj1.put("type", "urn:miot-spec-v2:device:light:0000A001:opple-desk:1");
             array.put(obj1);
+
             obj2.put("did", "1002");
             obj2.put("name", "blackee");
             obj2.put("type", "urn:miot-spec-v2:device:light:0000A001:opple-desk:1");
@@ -235,6 +233,7 @@ public class ServiceHandler extends AbstractHandler {
         }
 
         JSONObject objReturn = new JSONObject();
+
         try {
             objReturn.put("intent", intent);
             objReturn.put("requestId", requestId);
@@ -242,8 +241,8 @@ public class ServiceHandler extends AbstractHandler {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return objReturn;
 
+        return objReturn;
     }
 
     private JSONObject onGetProperties(JSONArray properties) {
@@ -251,11 +250,13 @@ public class ServiceHandler extends AbstractHandler {
         if (properties == null) {
             return objReturn;
         }
+
         List<PropertyOperation> list;
         list = DecodeOperater.decodeGetProperty(properties);
         list.forEach(property -> operation.get(property));
         List<JSONObject> result = list.stream().map(PropertyOperation::encodeGetPropertyResponse).collect(Collectors.toList());
         objReturn = ReturnObjectOperate.fillReturnObject(result, "properties", requestId, intent);
+
         return objReturn;
     }
 
@@ -265,16 +266,17 @@ public class ServiceHandler extends AbstractHandler {
         if (properties == null) {
             return objReturn;
         }
+
         List<PropertyOperation> list;
         list = DecodeOperater.decodeSetProperty(properties);
         list.forEach((property) -> {
             this.operation.set(property);
         });
+
         List<JSONObject> result = list.stream().map(PropertyOperation::encodeSetPropertyResponse).collect(Collectors.toList());
         objReturn = ReturnObjectOperate.fillReturnObject(result, "properties", requestId, intent);
         return objReturn;
     }
-
 
     private JSONObject onExecuteAction(JSONArray action) {
         JSONObject objReturn = new JSONObject();
@@ -296,11 +298,13 @@ public class ServiceHandler extends AbstractHandler {
         if (devices == null) {
             return objReturn;
         }
+
         List<SubscribeOperation> list;
         list = decodeOperater.decodeSetSubscribe(devices);
         list.forEach((subscribe) -> {
             this.subscribe.set(subscribe);
         });
+
         List<JSONObject> result = list.stream().map(SubscribeOperation::encodeSetSubscribeResponse).collect(Collectors.toList());
         objReturn = ReturnObjectOperate.fillReturnObject(result, "devices", requestId, intent);
         return objReturn;
@@ -311,11 +315,13 @@ public class ServiceHandler extends AbstractHandler {
         if (devices == null) {
             return objReturn;
         }
+
         List<SubscribeOperation> list;
         list = decodeOperater.decodeSetSubscribe(devices);
         list.forEach((subscribe) -> {
             this.subscribe.unset(subscribe);
         });
+
         List<JSONObject> result = list.stream().map(SubscribeOperation::encodeSetSubscribeResponse).collect(Collectors.toList());
 
         objReturn = ReturnObjectOperate.fillReturnObject(result, "devices", requestId, intent);
@@ -327,16 +333,17 @@ public class ServiceHandler extends AbstractHandler {
         if (devices == null) {
             return objReturn;
         }
+
         List<StatusOperation> list;
         list = DecodeOperater.decodeGetStatus(devices);
         list.forEach(deviceStatus -> {
             this.deviceStatus.get(deviceStatus);
         });
+
         List<JSONObject> result = list.stream().map(StatusOperation::encodeGetStatusResponse).collect(Collectors.toList());
 
         objReturn = ReturnObjectOperate.fillReturnObject(result, "devices", requestId, intent);
 
         return objReturn;
-
     }
 }

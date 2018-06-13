@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class ResponseOperater {
+
+
     public static void outPrinter(JSONObject o, String intent, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
 

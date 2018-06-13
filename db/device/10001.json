@@ -1,0 +1,17 @@
+{
+    "services": [
+        {
+            "siid": 1,
+            "properties": [
+                {
+                    "iid": 1,
+                    "value": 100  // 亮度
+                },
+                {
+                    "iid": 2,
+                    "value": false // 开关
+                }
+            ]
+        }
+    ]
+}

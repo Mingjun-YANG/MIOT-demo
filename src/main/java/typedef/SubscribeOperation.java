@@ -23,23 +23,16 @@ public class SubscribeOperation extends AbstractOperation {
         return subscribe;
     }
 
-    public JSONObject encodeSetSubscribeResponse() {
+    public JSONObject encodeSetSubscribeResponse() throws JSONException {
         JSONObject o = new JSONObject();
-        try {
-            o.put("did", this.did);
-            o.put("subscriptionId", this.subscriptionId);
-            o.put("status", this.status);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        o.put("did", this.did);
+        o.put("subscriptionId", this.subscriptionId);
+        o.put("status", this.status);
+
         if (this.status != 0) {
-            try {
-                o.put("description", this.description);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            o.put("description", this.description);
         }
+
         return o;
     }
-
 }

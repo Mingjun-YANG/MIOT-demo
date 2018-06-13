@@ -6,9 +6,14 @@ import typedef.PropertyOperation;
 
 public class OperationMockImpl implements Operation {
 
+    /**
+     * 读属性
+     *  - 如果成功， status = 0， 且返回属性值
+     *  - 如果失败， status为负值，且携带description（见文档《第三方设备云接入小米IOT平台》）
+     * @param property
+     */
     @Override
     public void get(PropertyOperation property) {
-        // TODO: 读属性,
 
         // 如果成功， status = 0， 且返回属性值
         if (property.did.equals("AAAA")) {

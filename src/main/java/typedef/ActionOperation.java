@@ -10,10 +10,10 @@ import java.util.List;
 public class ActionOperation extends AbstractOperation {
 
     public String did;
-    public int siid;
-    public int aiid;
-    public List<Object> out = new ArrayList<Object>();
-    public static JSONArray argumentIn = new JSONArray();
+    private int siid;
+    private int aiid;
+    public List<Object> out = new ArrayList<>();
+    private static JSONArray argumentIn = new JSONArray();
 
     public static ActionOperation decodeRequest(JSONObject o) {
         ActionOperation action = new ActionOperation();
@@ -59,6 +59,10 @@ public class ActionOperation extends AbstractOperation {
         }
 
         return o;
+    }
+
+    public int aiid() {
+        return aiid;
     }
 
 }

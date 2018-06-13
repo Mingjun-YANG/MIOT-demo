@@ -1,0 +1,23 @@
+{
+    "db": [
+        {
+            "uid": "jxfengzi@gmail.com",
+            "devices": [
+                {
+                    "did": "10001",
+                    "type": "urn:xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                }
+            ]
+        },
+        {
+            "uid": "jxfengzi@gmail.com",
+            "devices": [
+                {
+                    "did": "10002",
+                    "type": "urn:xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                }
+            ]
+        }
+    ]
+}
+
