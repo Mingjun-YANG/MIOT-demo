@@ -1,0 +1,72 @@
+{
+  "type": "urn:miot-spec-v2:device:outlet:0000A002:mockoutlet:1",
+  "description": "Outlet",
+  "services": [
+    {
+      "siid": 1,
+      "type": "urn:miot-spec-v2:service:device-information:00007801:mockoutlet:1",
+      "description": "Device Information",
+      "properties": [
+        {
+          "iid": 1,
+          "type": "urn:miot-spec-v2:property:manufacturer:00000001:mockoutlet:1",
+          "description": "Device Manufacturer",
+          "format": "string",
+          "value": "miot-spec",
+          "access": [
+            "read"
+          ]
+        },
+        {
+          "iid": 2,
+          "type": "urn:miot-spec-v2:property:model:00000002:mockoutlet:1",
+          "description": "Device Model",
+          "format": "string",
+          "value": "Model 1", // 开关
+          "access": [
+            "read"
+          ]
+        },
+        {
+          "iid": 3,
+          "type": "urn:miot-spec-v2:property:serial-number:00000003:mockoutlet:1",
+          "description": "Device Serial Number",
+          "format": "string",
+          "value": "00001111", // 开关
+          "access": [
+            "read"
+          ]
+        },
+        {
+          "iid": 4,
+          "type": "urn:miot-spec-v2:property:firmware-revision:00000005:mockoutlet:1",
+          "description": "Current Firmware Version",
+          "format": "string",
+          "value": "Version 1", // 开关
+          "access": [
+            "read"
+          ]
+        }
+      ]
+    },
+    {
+      "iid": 2,
+      "type": "urn:miot-spec-v2:service:switch:0000780C:mockoutlet:1",
+      "description": "Switch",
+      "properties": [
+        {
+          "iid": 1,
+          "type": "urn:miot-spec-v2:property:on:00000006:mockoutlet:1",
+          "description": "Switch Status",
+          "format": "bool",
+          "value": false,
+          "access": [
+            "read",
+            "write",
+            "notify"
+          ]
+        }
+      ]
+    }
+  ]
+}

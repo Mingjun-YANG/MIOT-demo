@@ -3,7 +3,7 @@ package typedef;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AccountOperation {
+public class AccountOperation extends AbstractOperation{
     public String token;
 
     // 功能ID

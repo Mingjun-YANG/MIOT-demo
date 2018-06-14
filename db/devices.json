@@ -5,7 +5,7 @@
             "devices": [
                 {
                     "did": "10001",
-                    "type": "urn:xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    "type": "urn:miot-spec-v2:device:light:0000A001:mocklight:1"
                 }
             ]
         },
@@ -14,7 +14,25 @@
             "devices": [
                 {
                     "did": "10002",
-                    "type": "urn:xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    "type": "urn:miot-spec-v2:device:outlet:0000A002:mockoutlet:1"
+                }
+            ]
+        },
+        {
+            "uid": "demouser@gmail.com",
+            "devices": [
+                {
+                    "did": "10002",
+                    "type": "urn:miot-spec-v2:device:outlet:0000A002:mockoutlet:1"
+                }
+            ]
+        },
+        {
+            "uid": "demouser@gmail.com",
+            "devices": [
+                {
+                    "did": "10003",
+                    "type": "urn:miot-spec-v2:device:light:0000A001:mockcandle:1"
                 }
             ]
         }

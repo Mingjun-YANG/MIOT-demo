@@ -1,17 +1,110 @@
 {
-    "services": [
+  "type": "urn:miot-spec-v2:device:light:0000A001:mocklight:1",
+  "description": "Light",
+  "customized-services": [],
+  "services": [
+    {
+      "siid": 1,
+      "type": "urn:miot-spec-v2:service:device-information:00007801:mocklight:1",
+      "description": "Device Information",
+      "properties": [
         {
-            "siid": 1,
-            "properties": [
-                {
-                    "iid": 1,
-                    "value": 100  // 亮度
-                },
-                {
-                    "iid": 2,
-                    "value": false // 开关
-                }
-            ]
+          "iid": 1,
+          "type": "urn:miot-spec-v2:property:manufacturer:00000001:mocklight:1",
+          "description": "Device Manufacturer",
+          "format": "string",
+          "value": "miot-spec",
+          "access": [
+            "read"
+          ]
+
+        },
+        {
+          "iid": 2,
+          "type": "urn:miot-spec-v2:property:model:00000002:mocklight:1",
+          "description": "Device Model",
+          "format": "string",
+          "value": "Model 1", // 开关
+          "access": [
+            "read"
+          ]
+        },
+        {
+          "iid": 3,
+          "type": "urn:miot-spec-v2:property:serial-number:00000003:mocklight:1",
+          "description": "Device Serial Number",
+          "format": "string",
+          "value": "00000001", // 开关
+          "access": [
+            "read"
+          ]
+        },
+        {
+          "iid": 4,
+          "type": "urn:miot-spec-v2:property:firmware-revision:00000005:mocklight:1",
+          "description": "Current Firmware Version",
+          "format": "string",
+          "value": "Version 1", // 开关
+          "access": [
+            "read"
+          ]
         }
-    ]
+      ]
+    },
+    {
+      "iid": 2,
+      "type": "urn:miot-spec-v2:service:light:00007802:mocklight:1",
+      "description": "Light",
+      "properties": [
+        {
+          "iid": 1,
+          "type": "urn:miot-spec-v2:property:on:00000006:mocklight:1",
+          "description": "Switch Status",
+          "format": "bool",
+          "value": true,
+          "access": [
+            "read",
+            "write",
+            "notify"
+          ]
+        },
+        {
+          "iid": 2,
+          "type": "urn:miot-spec-v2:property:brightness:0000000D:mocklight:1",
+          "description": "Brightness",
+          "format": "uint8",
+          "access": [
+            "read",
+            "write",
+            "notify"
+          ],
+          "value": 58,
+          "unit": "percentage",
+          "value-range": [
+            0,
+            100,
+            1
+          ]
+        },
+        {
+          "iid": 3,
+          "type": "urn:miot-spec-v2:property:color:0000000E:mocklight:1",
+          "description": "Color",
+          "format": "uint32",
+          "access": [
+            "read",
+            "write",
+            "notify"
+          ],
+          "value": 12111538,
+          "unit": "rgb",
+          "value-range": [
+            0,
+            16777215,
+            1
+          ]
+        }
+      ]
+    }
+  ]
 }
