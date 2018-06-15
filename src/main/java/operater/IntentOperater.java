@@ -1,7 +1,5 @@
 package operater;
 
-import device.Operation;
-import device.impl.OperationMockImpl;
 import deviceOwner.Ownership;
 import deviceOwner.impl.OwnershipImpl;
 import oauth.OAuthValidator;
@@ -17,7 +15,6 @@ import typedef.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 
@@ -25,7 +22,6 @@ import java.util.stream.Collectors;
 public class IntentOperater {
 
     private OAuthValidator validator;
-    private Operation operation;
     private Subscribe subscribe;
     private DecodeOperater decodeOperater;
     private HeaderValidator headerValidator;
@@ -35,7 +31,6 @@ public class IntentOperater {
     private String uid;
 
     private void ServiceHandler() {
-        operation = new OperationMockImpl();
         validator = new OAuthValidatorMockImpl();
         subscribe = new SubscribeMockImpl();
         deviceStatus = new DeviceStatusMockImpl();
@@ -68,16 +63,6 @@ public class IntentOperater {
 
         });
 
-
-
-
-//        List<Device> devices = ownership.getDeviceOwnership(list ,uid);
-//        List<JSONObject> result = list.stream().map(DeviceOwnerOperation::encodeGetDeviceOwner).collect(Collectors.toList());
-//        System.out.println(result.get(0));
-
-
-
-
         JSONObject objReturn = ReturnObjectOperate.fillReturnObject(jsonArray, "devices", requestId, intent);
 //        ownership.getDeviceOwnership(uid);
 //        List<JSONObject> result = ownership.getDeviceOwnership(uid).stream().map(DeviceOwnerOperation::encodeGetDeviceOwner).collect(Collectors.toList());
@@ -89,26 +74,109 @@ public class IntentOperater {
         return objReturn;
     }
 
-//    public JSONObject onGetProperties(JSONObject context) {
-//        JSONArray array = new JSONArray();
-//        try {
-//            array = context.getJSONArray("properties");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        JSONObject objReturn = new JSONObject();
-//        if (array == null) {
-//            return objReturn;
-//        }
-//
-//        List<PropertyOperation> list;
-//        list = DecodeOperater.decodeGetProperty(array);
-//        list.forEach(property -> operation.get(property));
-//        List<JSONObject> result = list.stream().map(PropertyOperation::encodeGetPropertyResponse).collect(Collectors.toList());
-//        objReturn = ReturnObjectOperate.fillReturnObject(result, "properties", requestId, intent);
-//
-//        return objReturn;
-//    }
+    public JSONObject onGetProperties (HttpServletResponse response, String requestId, String intent, String uid, JSONObject context) throws JSONException{
+        List<DeviceOwnerOperation> list = decodeOperater.decodeGetDevice(uid);
+
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        list.forEach(deviceOwnerOperation -> {
+            deviceOwnerOperation.DEV.forEach(device -> {
+                try {
+                    jsonObject.put("did",device.getDid());
+                    jsonObject.put("type",device.getType());
+                    jsonArray.put(jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            });
+
+        });
+
+        JSONArray array = new JSONArray();
+        try {
+            array = context.getJSONArray("properties");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        List<PropertyRequestOperation> list1;
+        list1 = DecodeOperater.decodeGetProperty(array);
+
+
+
+        JSONArray idArray = new JSONArray();
+        list1.forEach(PropertyRequestOperation -> {
+
+            JSONObject idObject = new JSONObject();
+            try {
+                idObject.put("did",PropertyRequestOperation.did);
+                idObject.put("siid",PropertyRequestOperation.siid);
+                idObject.put("iid",PropertyRequestOperation.iid);
+                idArray.put(idObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            for (int j = 0; j < idArray.length(); j++) {
+                if (jsonArray.getJSONObject(i).getString("did").equals(idArray.getJSONObject(j).getString("did"))) {
+                    DatabaseOperater databaseOperater = new DatabaseOperater();
+                    String st = databaseOperater.databaseReader(jsonArray.getJSONObject(i).getString("did"));
+                    JSONObject json = new JSONObject(st);
+                    List<ServiceOperation> s = ServiceOperation.decodeGetService(json);
+                    List<JSONObject> listReturn = new ArrayList<>();
+                    for (int k = 0; k < idArray.length(); k++) {
+                        if (s.size() < idArray.getJSONObject(k).getInt("siid") || idArray.getJSONObject(k).getInt("siid") < 0) {
+                            JSONObject objectReturn = new JSONObject();
+                            objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                            objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                            objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                            objectReturn.put("status", -2);
+                            objectReturn.put("description", "Service not found");
+                            listReturn.add(objectReturn);
+                        }
+                        else if (idArray.getJSONObject(k).getInt("iid") > s.get(idArray.getJSONObject(k).getInt("siid") - 1).properties.length() || idArray.getJSONObject(k).getInt("iid") < 0) {
+                            JSONObject objectReturn = new JSONObject();
+                            objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                            objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                            objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                            objectReturn.put("status", -3);
+                            objectReturn.put("description", "Property not found");
+                            listReturn.add(objectReturn);
+                        } else {
+                            ServiceOperation a = s.get(idArray.getJSONObject(k).getInt("siid") - 1);
+                            JSONObject object = a.properties.getJSONObject(idArray.getJSONObject(k).getInt("iid") - 1);
+                            JSONObject objectReturn = new JSONObject();
+                            objectReturn.put("value", object.getString("value"));
+                            objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                            objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                            objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                            objectReturn.put("status", 0);
+                            listReturn.add(objectReturn);
+                        }
+                    }
+                    System.out.println(listReturn);
+                    response.setStatus(400);
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+//        list1.forEach(property -> operation.get(property, jsonArray));
+        return null;
+    }
 //
 //
 //    public JSONObject onSetProperties(JSONObject context) {

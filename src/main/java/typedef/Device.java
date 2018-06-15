@@ -11,6 +11,7 @@ public class Device {
     public String getType() {
         return type;
     }
+
     public void setDid(String did) {
         this.did = did;
         return;

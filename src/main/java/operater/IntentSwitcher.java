@@ -10,8 +10,6 @@ import java.io.PrintWriter;
 public class IntentSwitcher {
 
 
-    private IntentOperater intentOperater;
-
     public JSONObject intentSwithcer(HttpServletResponse response, String requestId, String intent, String uid) throws IOException {
         JSONObject objreturn = new JSONObject();
         IntentOperater intentOperater = new IntentOperater();
@@ -24,7 +22,7 @@ public class IntentSwitcher {
         }
         return objreturn;
     }
-    public JSONObject intentSwithcer(HttpServletResponse response, String intent, JSONObject context, String uid) throws IOException {
+    public JSONObject intentSwithcer(HttpServletResponse response, String requestId, String intent, JSONObject context, String uid) throws IOException, JSONException {
         switch (intent.hashCode()) {
 //            case -1687278293:
 //                if (intent.equals("invoke-action")) {
@@ -45,11 +43,12 @@ public class IntentSwitcher {
 //                    }
 //                }
 //                break;
-//            case 1802344458:
-//                if (intent.equals("get-properties")) {
-//                    return intentOperater.onGetProperties(context);
-//                }
-//                break;
+            case 1802344458:
+                if (intent.equals("get-properties")) {
+                    IntentOperater intentOperater = new IntentOperater();
+                    return intentOperater.onGetProperties(response, requestId, intent, uid, context);
+                }
+                break;
 //            case 514841930:
 //                if (intent.equals("subscribe")) {
 //                    return intentOperater.onSubscribe(context);

@@ -32,16 +32,6 @@ public class DeviceOwnerOperation extends AbstractOperation{
         }
         return ownership;
     }
-
-    public JSONObject encodeGetDeviceOwner() {
-        JSONObject object = new JSONObject();
-        try {
-            object.put("devices", this.DEV);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return object;
-    }
 }
 
 

@@ -14,12 +14,6 @@ import status.Status;
 import status.impl.DeviceStatusMockImpl;
 import subscribe.Subscribe;
 import subscribe.impl.SubscribeMockImpl;
-import typedef.ActionOperation;
-import typedef.PropertyOperation;
-import typedef.StatusOperation;
-import typedef.SubscribeOperation;
-import device.Operation;
-import device.impl.OperationMockImpl;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
@@ -33,7 +27,6 @@ public class ServiceHandler extends AbstractHandler {
     private String requestId;
     private String intent;
     private OAuthValidator validator;
-    private Operation operation;
     private Subscribe subscribe;
     private DecodeOperater decodeOperater;
     private HeaderValidator headerValidator;
@@ -42,7 +35,6 @@ public class ServiceHandler extends AbstractHandler {
     private String uid;
 
     public ServiceHandler() {
-        operation = new OperationMockImpl();
         validator = new OAuthValidatorMockImpl();
         subscribe = new SubscribeMockImpl();
         deviceStatus = new DeviceStatusMockImpl();
@@ -87,9 +79,19 @@ public class ServiceHandler extends AbstractHandler {
         if (!headerValidator.headerValidator(response, requestId, intent)) {
             return;
         }
-        JSONObject obj = intentSwitcher.intentSwithcer(response,requestId, intent, uid);
-        response.setStatus(200);
-        out.println(obj);
+        if (intent == "get-devices") {
+            JSONObject obj = intentSwitcher.intentSwithcer(response, requestId, intent, uid);
+            response.setStatus(200);
+            out.println(obj);
+        } else {
+            try {
+                JSONObject obj = intentSwitcher.intentSwithcer(response, requestId,intent, context, uid);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
         baseRequest.setHandled(true);
     }
 }
