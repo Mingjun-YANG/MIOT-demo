@@ -42,17 +42,17 @@ public class DecodeOperater {
         return list;
     }
 
-//        public static List<PropertyOperation> decodeSetProperty (JSONArray o){
-//            List<PropertyOperation> list = new ArrayList<>();
-//            if (o.length() > 0) {
-//                for (int i = 0; i < o.length(); i++) {
-//                    JSONObject aaa = o.optJSONObject(i);
-//                    PropertyOperation bbb = decodeSetPropertyRequest(aaa);
-//                    list.add(bbb);
-//                }
-//            }
-//            return list;
-//        }
+        public static List<PropertyRequestOperation> decodeSetProperty (JSONArray o){
+            List<PropertyRequestOperation> list = new ArrayList<>();
+            if (o.length() > 0) {
+                for (int i = 0; i < o.length(); i++) {
+                    JSONObject aaa = o.optJSONObject(i);
+                    PropertyRequestOperation bbb = PropertyRequestOperation.decodeSetPropertyRequest(aaa);
+                    list.add(bbb);
+                }
+            }
+            return list;
+        }
 //
 //        public List<ActionOperation> decodeAction (JSONArray o){
 //

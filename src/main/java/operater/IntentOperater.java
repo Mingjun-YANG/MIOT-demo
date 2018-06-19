@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 
-
-
 public class IntentOperater {
 
     private OAuthValidator validator;
@@ -38,7 +36,7 @@ public class IntentOperater {
         intentSwitcher = new IntentSwitcher();
     }
 
-    public JSONObject onGetDevices(HttpServletResponse response, String requestId, String intent, String uid) throws JSONException{
+    public JSONObject onGetDevices(HttpServletResponse response, String requestId, String intent, String uid) throws JSONException {
         decodeOperater = new DecodeOperater();
         ownership = new OwnershipImpl();
         List<DeviceOwnerOperation> list = decodeOperater.decodeGetDevice(uid);
@@ -50,8 +48,8 @@ public class IntentOperater {
 
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    jsonObject.put("did",device.getDid());
-                    jsonObject.put("type",device.getType());
+                    jsonObject.put("did", device.getDid());
+                    jsonObject.put("type", device.getType());
 
                     jsonArray.put(jsonObject);
                 } catch (JSONException e) {
@@ -74,16 +72,17 @@ public class IntentOperater {
         return objReturn;
     }
 
-    public JSONObject onGetProperties (HttpServletResponse response, String requestId, String intent, String uid, JSONObject context) throws JSONException{
+    public List<JSONObject> onGetProperties(HttpServletResponse response, String requestId, String intent, String uid, JSONObject context) throws JSONException {
         List<DeviceOwnerOperation> list = decodeOperater.decodeGetDevice(uid);
 
-        JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         list.forEach(deviceOwnerOperation -> {
             deviceOwnerOperation.DEV.forEach(device -> {
                 try {
-                    jsonObject.put("did",device.getDid());
-                    jsonObject.put("type",device.getType());
+                    JSONObject jsonObject = new JSONObject();
+
+                    jsonObject.put("did", device.getDid());
+                    jsonObject.put("type", device.getType());
                     jsonArray.put(jsonObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -93,7 +92,7 @@ public class IntentOperater {
             });
 
         });
-
+        JSONObject jsonObject = new JSONObject();
         JSONArray array = new JSONArray();
         try {
             array = context.getJSONArray("properties");
@@ -104,15 +103,14 @@ public class IntentOperater {
         list1 = DecodeOperater.decodeGetProperty(array);
 
 
-
         JSONArray idArray = new JSONArray();
         list1.forEach(PropertyRequestOperation -> {
 
             JSONObject idObject = new JSONObject();
             try {
-                idObject.put("did",PropertyRequestOperation.did);
-                idObject.put("siid",PropertyRequestOperation.siid);
-                idObject.put("iid",PropertyRequestOperation.iid);
+                idObject.put("did", PropertyRequestOperation.did);
+                idObject.put("siid", PropertyRequestOperation.siid);
+                idObject.put("iid", PropertyRequestOperation.iid);
                 idArray.put(idObject);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -136,8 +134,7 @@ public class IntentOperater {
                             objectReturn.put("status", -2);
                             objectReturn.put("description", "Service not found");
                             listReturn.add(objectReturn);
-                        }
-                        else if (idArray.getJSONObject(k).getInt("iid") > s.get(idArray.getJSONObject(k).getInt("siid") - 1).properties.length() || idArray.getJSONObject(k).getInt("iid") < 0) {
+                        } else if (idArray.getJSONObject(k).getInt("iid") > s.get(idArray.getJSONObject(k).getInt("siid") - 1).properties.length() || idArray.getJSONObject(k).getInt("iid") < 0) {
                             JSONObject objectReturn = new JSONObject();
                             objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
                             objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
@@ -158,49 +155,240 @@ public class IntentOperater {
                         }
                     }
                     System.out.println(listReturn);
-                    response.setStatus(400);
+                    response.setStatus(200);
                 }
             }
         }
 
 
-
-
-
-
-
-
-
-
-
-
 //        list1.forEach(property -> operation.get(property, jsonArray));
         return null;
     }
+
+    //
 //
-//
-//    public JSONObject onSetProperties(JSONObject context) {
-//        JSONArray array = new JSONArray();
-//        try {
-//            array = context.getJSONArray("properties");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        JSONObject objReturn = new JSONObject();
-//        if (array == null) {
-//            return objReturn;
-//        }
-//
-//        List<PropertyOperation> list;
-//        list = DecodeOperater.decodeSetProperty(array);
-//        list.forEach((property) -> {
-//            this.operation.set(property);
-//        });
-//
-//        List<JSONObject> result = list.stream().map(PropertyOperation::encodeSetPropertyResponse).collect(Collectors.toList());
-//        objReturn = ReturnObjectOperate.fillReturnObject(result, "properties", requestId, intent);
-//        return objReturn;
-//    }
+    public List<JSONObject> onSetProperties(HttpServletResponse response, String requestId, String intent, String uid, JSONObject context) throws JSONException {
+        List<DeviceOwnerOperation> list = decodeOperater.decodeGetDevice(uid);
+
+        JSONArray jsonArray = new JSONArray();
+        list.forEach(deviceOwnerOperation -> {
+            deviceOwnerOperation.DEV.forEach(device -> {
+                try {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("did", device.getDid());
+                    jsonObject.put("type", device.getType());
+                    jsonArray.put(jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            });
+
+        });
+
+        JSONArray array = new JSONArray();
+        try {
+            array = context.getJSONArray("properties");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        List<PropertyRequestOperation> list1;
+        list1 = DecodeOperater.decodeSetProperty(array);
+
+
+        JSONArray idArray = new JSONArray();
+        list1.forEach(PropertyRequestOperation -> {
+
+            JSONObject idObject = new JSONObject();
+            try {
+                idObject.put("did", PropertyRequestOperation.did);
+                idObject.put("siid", PropertyRequestOperation.siid);
+                idObject.put("iid", PropertyRequestOperation.iid);
+                idObject.put("value", PropertyRequestOperation.value);
+                idArray.put(idObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        List<JSONObject> listReturn = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            for (int j = 0; j < idArray.length(); j++) {
+                if (jsonArray.getJSONObject(i).getString("did").equals(idArray.getJSONObject(j).getString("did"))) {
+                    DatabaseOperater databaseOperater = new DatabaseOperater();
+                    String st = databaseOperater.databaseReader(jsonArray.getJSONObject(i).getString("did"));
+                    JSONObject json = new JSONObject(st);
+                    List<ServiceOperation> s = ServiceOperation.decodeGetService(json);
+                    for (int k = 0; k < idArray.length(); k++) {
+                        if (s.size() < idArray.getJSONObject(k).getInt("siid") || idArray.getJSONObject(k).getInt("siid") < 0) {
+                            System.out.println(idArray.getJSONObject(k).getInt("siid"));
+                            System.out.println(s.size());
+                            JSONObject objectReturn = new JSONObject();
+                            objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                            objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                            objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                            objectReturn.put("status", -2);
+                            objectReturn.put("description", "Service not found");
+                            listReturn.add(objectReturn);
+                        } else if (idArray.getJSONObject(k).getInt("iid") > s.get(idArray.getJSONObject(k).getInt("siid") - 1).properties.length() || idArray.getJSONObject(k).getInt("iid") < 0) {
+                            JSONObject objectReturn = new JSONObject();
+                            objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                            objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                            objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                            objectReturn.put("status", -3);
+                            objectReturn.put("description", "Property not found");
+                            listReturn.add(objectReturn);
+                        } else {
+                            ServiceOperation a = s.get(idArray.getJSONObject(k).getInt("siid") - 1);
+                            JSONObject object = a.properties.getJSONObject(idArray.getJSONObject(k).getInt("iid") - 1);
+                            System.out.println(ValueFormat.converter(object.getString("format")).getClass());
+                            System.out.println(idArray.getJSONObject(j).get("value").getClass());
+                            if (ValueFormat.converter(object.getString("format")).getClass() == idArray.getJSONObject(j).get("value").getClass()) {
+                                if (ValueFormat.converter(object.getString("format")).getClass() == Integer.class) {
+                                    boolean flag = false;
+                                    System.out.println(object.getJSONArray("access").getString(1));
+                                    for (int m = 0; m < object.getJSONArray("access").length(); m++) {
+                                        if (object.getJSONArray("access").getString(m).equals("write")) {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!flag) {
+                                        JSONObject objectReturn = new JSONObject();
+                                        objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                                        objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                                        objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                                        objectReturn.put("status", -8);
+                                        objectReturn.put("description", "Property is not writeable");
+                                        listReturn.add(objectReturn);
+                                    } else if (flag) {
+                                        if (object.optJSONArray("value-range") != null) {
+                                            int min = ValueFormat.toInteger(object.getJSONArray("value-range").get(0));
+                                            int max = ValueFormat.toInteger(object.getJSONArray("value-range").get(1));
+                                            if (ValueFormat.toInteger(idArray.getJSONObject(k).getInt("value")) < min || ValueFormat.toInteger(idArray.getJSONObject(k).getInt("value")) > max) {
+                                                JSONObject objectReturn = new JSONObject();
+                                                objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                                                objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                                                objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                                                objectReturn.put("status", -10);
+                                                objectReturn.put("description", "Property out of range");
+                                                listReturn.add(objectReturn);
+                                            }
+                                        } else if (object.optJSONArray("value-list") != null) {
+                                            if (ValueFormat.toFloat(idArray.getJSONObject(k).getInt("value")) < 0 || ValueFormat.toFloat(idArray.getJSONObject(k).getInt("value")) > object.getJSONArray("value-list").length()) {
+                                                JSONObject objectReturn = new JSONObject();
+                                                objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                                                objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                                                objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                                                objectReturn.put("status", -10);
+                                                objectReturn.put("description", "Property out of range");
+                                                listReturn.add(objectReturn);
+                                            }
+                                        }
+                                        JSONObject objectReturn = new JSONObject();
+                                        objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                                        objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                                        objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                                        objectReturn.put("status", 0);
+                                        listReturn.add(objectReturn);
+                                        break;
+                                    }
+                                } else if (ValueFormat.converter(object.getString("format")).getClass() == Float.class) {
+                                    boolean flag = false;
+                                    for (int m = 0; m < object.getJSONArray("access").length(); m++) {
+                                        if (object.getJSONArray("access").get(m) == "write") {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!flag) {
+                                        JSONObject objectReturn = new JSONObject();
+                                        objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                                        objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                                        objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                                        objectReturn.put("status", -8);
+                                        objectReturn.put("description", "Property is not writeable");
+                                        listReturn.add(objectReturn);
+                                    } else if (flag) {
+                                        if (object.optJSONArray("value-range") != null) {
+                                            float min = ValueFormat.toFloat(object.optJSONArray("value-range").get(0));
+                                            float max = ValueFormat.toFloat(object.optJSONArray("value-range").get(1));
+                                            if (ValueFormat.toFloat(idArray.getJSONObject(k).getInt("value")) < min || ValueFormat.toFloat(idArray.getJSONObject(k).getInt("value")) > max) {
+                                                JSONObject objectReturn = new JSONObject();
+                                                objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                                                objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                                                objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                                                objectReturn.put("status", -10);
+                                                objectReturn.put("description", "Property out of range");
+                                                listReturn.add(objectReturn);
+                                                break;
+                                            }
+                                        } else if (object.optJSONArray("value-list") != null) {
+                                            if (ValueFormat.toFloat(idArray.getJSONObject(k).getInt("value")) < 0 || ValueFormat.toFloat(idArray.getJSONObject(k).getInt("value")) > object.getJSONArray("value-list").length()) {
+                                                JSONObject objectReturn = new JSONObject();
+                                                objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                                                objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                                                objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                                                objectReturn.put("status", -10);
+                                                objectReturn.put("description", "Property out of range");
+                                                listReturn.add(objectReturn);
+                                                break;
+                                            }
+                                        }
+                                        JSONObject objectReturn = new JSONObject();
+                                        objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                                        objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                                        objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                                        objectReturn.put("status", 0);
+                                        listReturn.add(objectReturn);
+                                        break;
+                                    }
+                                } else if (ValueFormat.converter(object.getString("format")).getClass() == Boolean.class) {
+                                    boolean flag = false;
+                                    for (int m = 0; m < object.getJSONArray("access").length(); m++) {
+                                        if (object.getJSONArray("access").getString(m).equals("write")) {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!flag) {
+                                        JSONObject objectReturn = new JSONObject();
+                                        objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                                        objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                                        objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                                        objectReturn.put("status", -8);
+                                        objectReturn.put("description", "Property is not writeable");
+                                        listReturn.add(objectReturn);
+                                        break;
+                                    }
+                                    JSONObject objectReturn = new JSONObject();
+                                    objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                                    objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                                    objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                                    objectReturn.put("status", 0);
+                                    listReturn.add(objectReturn);
+                                    break;
+                                }
+                            }
+                            else {
+                                JSONObject objectReturn = new JSONObject();
+                                objectReturn.put("did", idArray.getJSONObject(k).getInt("did"));
+                                objectReturn.put("piid", idArray.getJSONObject(k).getInt("iid"));
+                                objectReturn.put("siid", idArray.getJSONObject(k).getInt("siid"));
+                                objectReturn.put("status", -10);
+                                objectReturn.put("description", "Property format is wrong");
+                                listReturn.add(objectReturn);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        response.setStatus(200);
+        return listReturn;
+    }
+}
+
 //
 //    public JSONObject onExecuteAction(JSONObject context) {
 //        JSONArray array = new JSONArray();
@@ -294,4 +482,3 @@ public class IntentOperater {
 //
 //        return objReturn;
 //    }
-}

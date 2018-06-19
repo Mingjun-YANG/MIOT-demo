@@ -85,7 +85,10 @@ public class ServiceHandler extends AbstractHandler {
             out.println(obj);
         } else {
             try {
-                JSONObject obj = intentSwitcher.intentSwithcer(response, requestId,intent, context, uid);
+
+                List<JSONObject> listReturn = intentSwitcher.intentSwithcer(response, requestId,intent, context, uid);
+                System.out.println(listReturn);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

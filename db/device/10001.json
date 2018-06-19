@@ -4,7 +4,7 @@
   "customized-services": [],
   "services": [
     {
-      "siid": 1,
+      "iid": 1,
       "type": "urn:miot-spec-v2:service:device-information:00007801:mocklight:1",
       "description": "Device Information",
       "properties": [
@@ -24,7 +24,7 @@
           "type": "urn:miot-spec-v2:property:model:00000002:mocklight:1",
           "description": "Device Model",
           "format": "string",
-          "value": "Model 1", // 开关
+          "value": "Model 1",
           "access": [
             "read"
           ]
@@ -34,7 +34,7 @@
           "type": "urn:miot-spec-v2:property:serial-number:00000003:mocklight:1",
           "description": "Device Serial Number",
           "format": "string",
-          "value": "00000001", // 开关
+          "value": "00000001",
           "access": [
             "read"
           ]
@@ -44,7 +44,7 @@
           "type": "urn:miot-spec-v2:property:firmware-revision:00000005:mocklight:1",
           "description": "Current Firmware Version",
           "format": "string",
-          "value": "Version 1", // 开关
+          "value": "Version 1",
           "access": [
             "read"
           ]

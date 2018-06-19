@@ -3,7 +3,7 @@
   "description": "Outlet",
   "services": [
     {
-      "siid": 1,
+      "iid": 1,
       "type": "urn:miot-spec-v2:service:device-information:00007801:mockoutlet:1",
       "description": "Device Information",
       "properties": [
@@ -22,7 +22,7 @@
           "type": "urn:miot-spec-v2:property:model:00000002:mockoutlet:1",
           "description": "Device Model",
           "format": "string",
-          "value": "Model 1", // 开关
+          "value": "Model 1",
           "access": [
             "read"
           ]
@@ -32,7 +32,7 @@
           "type": "urn:miot-spec-v2:property:serial-number:00000003:mockoutlet:1",
           "description": "Device Serial Number",
           "format": "string",
-          "value": "00001111", // 开关
+          "value": "00001111",
           "access": [
             "read"
           ]
@@ -42,7 +42,7 @@
           "type": "urn:miot-spec-v2:property:firmware-revision:00000005:mockoutlet:1",
           "description": "Current Firmware Version",
           "format": "string",
-          "value": "Version 1", // 开关
+          "value": "Version 1",
           "access": [
             "read"
           ]
