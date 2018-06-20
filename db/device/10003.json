@@ -1,6 +1,8 @@
 {
   "type": "urn:miot-spec-v2:device:light:0000A001:mockcandle:1",
   "description": "Light",
+  "subscriptionId": "zzzzzz",
+  "status": "true",
   "services": [
     {
       "iid": 1,
@@ -93,6 +95,15 @@
             1
           ],
           "unit": "percentage"
+        }
+      ],
+      "actions": [
+        {
+          "iid": 1,
+          "type": "urn:miot-spec-v2:action:on:00000008:mockcandle:1",
+          "description": "enlight the candle",
+          "in": [5, "weak"],
+          "out": [100, "strong"]
         }
       ]
     }

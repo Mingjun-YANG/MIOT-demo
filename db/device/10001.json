@@ -1,6 +1,8 @@
 {
   "type": "urn:miot-spec-v2:device:light:0000A001:mocklight:1",
   "description": "Light",
+  "subscriptionId": "123456",
+  "status": "true",
   "customized-services": [],
   "services": [
     {

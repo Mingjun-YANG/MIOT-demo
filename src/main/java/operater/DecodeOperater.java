@@ -53,6 +53,30 @@ public class DecodeOperater {
             }
             return list;
         }
+
+    public static List<SubscribeRequestOperation> decodeSubscribe (JSONArray o){
+        List<SubscribeRequestOperation> list = new ArrayList<>();
+        if (o.length() > 0) {
+            for (int i = 0; i < o.length(); i++) {
+                JSONObject aaa = o.optJSONObject(i);
+                SubscribeRequestOperation bbb = SubscribeRequestOperation.decodeGetSubscribeRequest(aaa);
+                list.add(bbb);
+            }
+        }
+        return list;
+    }
+
+    public static List<GetStatusRequestOperation> decodeGetStatus (JSONArray o){
+        List<GetStatusRequestOperation> list = new ArrayList<>();
+        if (o.length() > 0) {
+            for (int i = 0; i < o.length(); i++) {
+                JSONObject aaa = o.optJSONObject(i);
+                GetStatusRequestOperation bbb = GetStatusRequestOperation.decodeGetStatusRequest(aaa);
+                list.add(bbb);
+            }
+        }
+        return list;
+    }
 //
 //        public List<ActionOperation> decodeAction (JSONArray o){
 //
