@@ -11,8 +11,10 @@ public class ServiceOperation extends AbstractOperation {
 
     public JSONArray properties = new JSONArray();
 
+    public JSONArray action = new JSONArray();
+
     public String siid;
-    // 功能ID
+
     public String type;
 
     public String description;
@@ -28,11 +30,11 @@ public class ServiceOperation extends AbstractOperation {
                 Service.siid = object.getString("iid");
                 Service.type = object.getString("type");
                 Service.description = object.getString("description");
-                Service.properties = object.getJSONArray("properties");
+                Service.properties = object.optJSONArray("properties");
+                Service.action = object.optJSONArray("actions");
                 list.add(Service);
             }
-        }
-         catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return list;

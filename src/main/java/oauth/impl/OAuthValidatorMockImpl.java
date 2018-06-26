@@ -11,14 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OAuthValidatorMockImpl implements OAuthValidator {
-//    private Account account1;
-//
-//    public OAuthValidatorMockImpl() {
-//        account1 = new AccountMockImpl();
-//    }
+
     @Override
     public String validate(String token) throws JSONException{
-        String uid = new String();
+        String uid = "";
         DatabaseOperater reader = new DatabaseOperater();
         String string = reader.databaseReader("account");
         JSONObject json = new JSONObject(string);
@@ -32,11 +28,11 @@ public class OAuthValidatorMockImpl implements OAuthValidator {
                 list.add(bbb);
             }
         }
-        for (int i = 0; i < list.size(); i++) {
-        if (list.get(i).token.equals(token)) {
-            uid = list.get(i).uid;
-            break;
-        }
+        for (AccountOperation aList : list) {
+            if (aList.token.equals(token)) {
+                uid = aList.uid;
+                break;
+            }
         }
         return uid;
     }

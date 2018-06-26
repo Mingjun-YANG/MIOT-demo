@@ -4,8 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-
 public class ReturnObjectOperate {
 
     public static JSONObject fillReturnObject(JSONArray list, String name, String requestId, String intent) {

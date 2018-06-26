@@ -9,7 +9,7 @@ public class DatabaseOperater {
 
     public String databaseReader(String fileName) {
         String Path;
-        if (fileName.matches("devices") || fileName.matches("account") ) {
+        if (fileName.matches("devices") || fileName.matches("account")) {
             Path = "db/" + fileName + ".json";
         } else {
             Path = "db/device/" + fileName + ".json";

@@ -4,27 +4,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.http.HttpServletResponse;
+
+class ResponseOperater {
 
 
-public class ResponseOperater {
-
-
-    public static void outPrinter(JSONObject o, String intent, HttpServletResponse response) throws IOException {
-        PrintWriter out = response.getWriter();
-
-        if (o == null) {
-            response.setStatus(400);
-            out.println(intent + " is null");
-        } else {
-            response.setStatus(200);
-            out.println(o);
-        }
-    }
-
-    public static JSONObject fillResponse(int i, int j, JSONArray idArray) throws JSONException {
+    static JSONObject fillResponse(int i, int j, JSONArray idArray) throws JSONException {
         JSONObject objectReturn = new JSONObject();
         switch (i) {
             case 0:
@@ -54,6 +38,13 @@ public class ResponseOperater {
                 objectReturn.put("status", -3);
                 objectReturn.put("description", "Property not found");
                 return objectReturn;
+            case -5:
+                objectReturn.put("did", idArray.getJSONObject(j).getInt("did"));
+                objectReturn.put("aiid", idArray.getJSONObject(j).getInt("iid"));
+                objectReturn.put("siid", idArray.getJSONObject(j).getInt("siid"));
+                objectReturn.put("status", -5);
+                objectReturn.put("description", "Action not found");
+                return objectReturn;
             case -10:
                 objectReturn.put("did", idArray.getJSONObject(j).getInt("did"));
                 objectReturn.put("piid", idArray.getJSONObject(j).getInt("iid"));
@@ -72,7 +63,7 @@ public class ResponseOperater {
         return objectReturn;
     }
 
-    public static JSONObject fillResponse(int i, int j, JSONArray idArray, String subscribeId) throws JSONException {
+    static JSONObject fillResponse(int i, int j, JSONArray idArray, String subscribeId) throws JSONException {
         JSONObject objectReturn = new JSONObject();
         switch (i) {
             case 0:
@@ -89,18 +80,18 @@ public class ResponseOperater {
         return objectReturn;
     }
 
-    public static JSONObject fillStatusResponse(int i, int j, JSONObject status, JSONArray idArray) throws JSONException {
+    static JSONObject fillStatusResponse(int i, int j, JSONObject status, JSONArray idArray) throws JSONException {
 
         JSONObject objectReturn = new JSONObject();
         switch (i) {
             case 0:
-                objectReturn.put("did", idArray.getInt(j));
+                objectReturn.put("did", idArray.getJSONObject(j).getInt("did"));
                 objectReturn.put("online", status.getString("status"));
                 objectReturn.put("name", status.getString("type"));
                 objectReturn.put("status", 0);
                 return objectReturn;
             case -1:
-                objectReturn.put("did", idArray.getInt(j));
+                objectReturn.put("did", idArray.getJSONObject(j).getInt("did"));
                 objectReturn.put("description", "invalid device id");
                 objectReturn.put("status", -1);
                 return objectReturn;
@@ -108,5 +99,32 @@ public class ResponseOperater {
         return objectReturn;
     }
 
+    static JSONObject fillActionResponse(int i, int j, JSONObject action, JSONArray idArray) throws JSONException {
 
+        JSONObject objectReturn = new JSONObject();
+        switch (i) {
+            case 0:
+                objectReturn.put("did", idArray.getJSONObject(j).getInt("did"));
+                objectReturn.put("siid", idArray.getJSONObject(j).getInt("siid"));
+                objectReturn.put("aiid", idArray.getJSONObject(j).getInt("aiid"));
+                objectReturn.put("out", action.getJSONArray("out"));
+                objectReturn.put("status", 0);
+                return objectReturn;
+            case -2:
+                objectReturn.put("did", idArray.getJSONObject(j).getInt("did"));
+                objectReturn.put("aiid", idArray.getJSONObject(j).getInt("aiid"));
+                objectReturn.put("siid", idArray.getJSONObject(j).getInt("siid"));
+                objectReturn.put("status", -2);
+                objectReturn.put("description", "Service not found");
+                return objectReturn;
+            case -5:
+                objectReturn.put("did", idArray.getJSONObject(j).getInt("did"));
+                objectReturn.put("aiid", idArray.getJSONObject(j).getInt("aiid"));
+                objectReturn.put("siid", idArray.getJSONObject(j).getInt("siid"));
+                objectReturn.put("status", -5);
+                objectReturn.put("description", "Action not found");
+                return objectReturn;
+        }
+        return objectReturn;
+    }
 }

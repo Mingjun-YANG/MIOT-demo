@@ -1,7 +1,6 @@
 package deviceOwner;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 import typedef.Device;
 import typedef.DeviceOwnerOperation;
 

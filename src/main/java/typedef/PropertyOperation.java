@@ -9,17 +9,14 @@ import java.util.List;
 
 public class PropertyOperation extends AbstractOperation {
 
-    // 设备ID
     public int iid;
 
-    // 功能ID
     public String type;
 
-    // 属性ID
     public String description;
 
     public String format;
-    // 属性值
+
     public Object value;
 
     public static List<PropertyOperation> decodeGetProperty(JSONArray array) {

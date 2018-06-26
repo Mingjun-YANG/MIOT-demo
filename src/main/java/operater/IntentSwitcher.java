@@ -22,14 +22,15 @@ public class IntentSwitcher {
         }
         return objreturn;
     }
+
     public List<JSONObject> intentSwithcer(HttpServletResponse response, String requestId, String intent, JSONObject context, String uid) throws IOException, JSONException {
         IntentOperater intentOperater = new IntentOperater();
         switch (intent.hashCode()) {
-//            case -1687278293:
-//                if (intent.equals("invoke-action")) {
-//                    return intentOperater.onExecuteAction(context);
-//                }
-//                break;
+            case -1687278293:
+                if (intent.equals("invoke-action")) {
+                    return intentOperater.onExcecuteAction(response, requestId, intent, uid, context);
+                }
+                break;
             case 30608254:
                 if (intent.equals("set-properties")) {
                     return intentOperater.onSetProperties(response, requestId, intent, uid, context);

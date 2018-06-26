@@ -7,7 +7,8 @@ import java.io.PrintWriter;
 public class HeaderValidator {
 
     public boolean headerValidator(HttpServletResponse response, String requestId, String intent) throws IOException {
-        PrintWriter out = response.getWriter();
+        response.getWriter();
+        PrintWriter out;
         if (requestId == null) {
             response.setStatus(400);
             out = response.getWriter();

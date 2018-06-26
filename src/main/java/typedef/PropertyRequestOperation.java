@@ -3,7 +3,7 @@ package typedef;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PropertyRequestOperation{
+public class PropertyRequestOperation {
 
     public String did;
 
@@ -16,9 +16,9 @@ public class PropertyRequestOperation{
     public static PropertyRequestOperation decodeGetPropertyRequest(JSONObject object) {
         PropertyRequestOperation propertyRequest = new PropertyRequestOperation();
         try {
-                propertyRequest.did = object.getString("did");
-                propertyRequest.siid = object.getInt("siid");
-                propertyRequest.iid = object.getInt("iid");
+            propertyRequest.did = object.getString("did");
+            propertyRequest.siid = object.getInt("siid");
+            propertyRequest.iid = object.getInt("iid");
         } catch (JSONException e) {
             e.printStackTrace();
         }

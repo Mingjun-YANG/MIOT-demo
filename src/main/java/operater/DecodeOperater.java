@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DecodeOperater {
 
-    public static List<DeviceOwnerOperation> decodeGetDevice(String uid) throws JSONException {
+    static List<DeviceOwnerOperation> decodeGetDevice(String uid) throws JSONException {
 
         DatabaseOperater reader = new DatabaseOperater();
         String string = reader.databaseReader("devices");
@@ -23,14 +23,14 @@ public class DecodeOperater {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject aaa = array.optJSONObject(i);
                 if (DeviceOwnerOperation.decodeGetDeviceOwner(aaa, uid).DEV.size() != 0) {
-                list.add(DeviceOwnerOperation.decodeGetDeviceOwner(aaa, uid));
+                    list.add(DeviceOwnerOperation.decodeGetDeviceOwner(aaa, uid));
                 }
             }
         }
         return list;
     }
 
-    public static List<PropertyRequestOperation> decodeGetProperty(JSONArray o) {
+    static List<PropertyRequestOperation> decodeGetProperty(JSONArray o) {
         List<PropertyRequestOperation> list = new ArrayList<>();
         if (o.length() > 0) {
             for (int i = 0; i < o.length(); i++) {
@@ -42,19 +42,19 @@ public class DecodeOperater {
         return list;
     }
 
-        public static List<PropertyRequestOperation> decodeSetProperty (JSONArray o){
-            List<PropertyRequestOperation> list = new ArrayList<>();
-            if (o.length() > 0) {
-                for (int i = 0; i < o.length(); i++) {
-                    JSONObject aaa = o.optJSONObject(i);
-                    PropertyRequestOperation bbb = PropertyRequestOperation.decodeSetPropertyRequest(aaa);
-                    list.add(bbb);
-                }
+    static List<PropertyRequestOperation> decodeSetProperty(JSONArray o) {
+        List<PropertyRequestOperation> list = new ArrayList<>();
+        if (o.length() > 0) {
+            for (int i = 0; i < o.length(); i++) {
+                JSONObject aaa = o.optJSONObject(i);
+                PropertyRequestOperation bbb = PropertyRequestOperation.decodeSetPropertyRequest(aaa);
+                list.add(bbb);
             }
-            return list;
         }
+        return list;
+    }
 
-    public static List<SubscribeRequestOperation> decodeSubscribe (JSONArray o){
+    static List<SubscribeRequestOperation> decodeSubscribe(JSONArray o) {
         List<SubscribeRequestOperation> list = new ArrayList<>();
         if (o.length() > 0) {
             for (int i = 0; i < o.length(); i++) {
@@ -66,7 +66,7 @@ public class DecodeOperater {
         return list;
     }
 
-    public static List<GetStatusRequestOperation> decodeGetStatus (JSONArray o){
+    static List<GetStatusRequestOperation> decodeGetStatus(JSONArray o) {
         List<GetStatusRequestOperation> list = new ArrayList<>();
         if (o.length() > 0) {
             for (int i = 0; i < o.length(); i++) {
@@ -77,43 +77,17 @@ public class DecodeOperater {
         }
         return list;
     }
-//
-//        public List<ActionOperation> decodeAction (JSONArray o){
-//
-//            List<ActionOperation> list = new ArrayList<>();
-//            if (o.length() > 0) {
-//                for (int i = 0; i < o.length(); i++) {
-//                    JSONObject aaa = o.optJSONObject(i);
-//                    ActionOperation bbb = decodeRequest(aaa);
-//                    list.add(bbb);
-//                }
-//            }
-//            return list;
-//        }
-//
-//        public List<SubscribeOperation> decodeSetSubscribe (JSONArray o){
-//
-//            List<SubscribeOperation> list = new ArrayList<>();
-//            if (o.length() > 0) {
-//                for (int i = 0; i < o.length(); i++) {
-//                    JSONObject aaa = o.optJSONObject(i);
-//                    SubscribeOperation bbb = decodeSetSubscribeRequest(aaa);
-//                    list.add(bbb);
-//                }
-//            }
-//            return list;
-//        }
-//
-//        public static List<StatusOperation> decodeGetStatus (JSONArray o){
-//
-//            List<StatusOperation> list = new ArrayList<>();
-//            if (o.length() > 0) {
-//                for (int i = 0; i < o.length(); i++) {
-//                    JSONObject aaa = o.optJSONObject(i);
-//                    StatusOperation bbb = decodeGetStatusRequest(aaa);
-//                    list.add(bbb);
-//                }
-//            }
-//            return list;
-//        }
+
+    static List<ActionRequestOperation> decodeAction(JSONArray o) {
+
+        List<ActionRequestOperation> list = new ArrayList<>();
+        if (o.length() > 0) {
+            for (int i = 0; i < o.length(); i++) {
+                JSONObject aaa = o.optJSONObject(i);
+                ActionRequestOperation bbb = ActionRequestOperation.decodeActionRequest(aaa);
+                list.add(bbb);
+            }
+        }
+        return list;
     }
+}
