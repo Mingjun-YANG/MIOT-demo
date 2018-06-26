@@ -66,14 +66,13 @@ public class ServiceHandler extends AbstractHandler {
             try {
 
                 List<JSONObject> listReturn = intentSwitcher.intentSwithcer(response, requestId, intent, context, uid);
-                System.out.println(listReturn);
-
+                response.setStatus(200);
+                out.println(listReturn);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
         }
-
         baseRequest.setHandled(true);
     }
 }

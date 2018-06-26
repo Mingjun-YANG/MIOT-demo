@@ -87,23 +87,15 @@ class IntentOperater {
                     } else {
                         ServiceOperation a = s.get(idArray.getJSONObject(j).getInt("siid") - 1);
                         JSONObject object = a.properties.getJSONObject(idArray.getJSONObject(j).getInt("iid") - 1);
-                        JSONObject objectReturn = new JSONObject();
-                        objectReturn.put("value", object.getString("value"));
-                        objectReturn.put("did", idArray.getJSONObject(j).getInt("did"));
-                        objectReturn.put("piid", idArray.getJSONObject(j).getInt("iid"));
-                        objectReturn.put("siid", idArray.getJSONObject(j).getInt("siid"));
-                        objectReturn.put("status", 0);
-                        listReturn.add(objectReturn);
+                        listReturn.add(ResponseOperater.fillPropertyResponse(0, j, object, idArray));
                     }
 
 
                 }
             }
         }
-        System.out.println(listReturn);
         response.setStatus(200);
-
-        return null;
+        return listReturn;
     }
 
     List<JSONObject> onGetStatus(HttpServletResponse response, String requestId, String intent, String uid, JSONObject context) throws JSONException {
@@ -381,15 +373,9 @@ class IntentOperater {
                     } else {
                         ServiceOperation a = s.get(idArray.getJSONObject(j).getInt("siid") - 1);
                         object = a.action.getJSONObject(idArray.getJSONObject(j).getInt("aiid") - 1);
-//                        if (!object.getJSONArray("in").equals(idArray.getJSONObject(j).getJSONArray("in"))) {
-//                            System.out.println(object.getJSONArray("in"));
-//                            System.out.println(idArray.getJSONObject(j).getJSONArray("in"));
-//                            listReturn.add(ResponseOperater.fillActionResponse(-5, j, object, idArray));
-//                            break;
-//                        } else {
+
                         listReturn.add(ResponseOperater.fillActionResponse(0, j, object, idArray));
                         break;
-//                        }
 
                     }
 

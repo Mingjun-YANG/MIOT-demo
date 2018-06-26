@@ -9,15 +9,15 @@ import java.util.List;
 
 public class PropertyOperation extends AbstractOperation {
 
-    public int iid;
+    private int iid;
 
     public String type;
 
-    public String description;
+    private String description;
 
-    public String format;
+    private String format;
 
-    public Object value;
+    private Object value;
 
     public static List<PropertyOperation> decodeGetProperty(JSONArray array) {
         List<PropertyOperation> list = new ArrayList<>();
@@ -38,72 +38,6 @@ public class PropertyOperation extends AbstractOperation {
         return list;
     }
 
-    public static List<JSONObject> decodeFillProperty(JSONObject object) {
-        List<JSONObject> list = new ArrayList<>();
-        for (int i = 0; i < object.length(); i++) {
-            list.add(object);
-        }
 
-        return list;
-
-//    public static PropertyOperation decodeSetPropertyRequest(JSONObject o) {
-//        PropertyOperation property = new PropertyOperation();
-//        try {
-//            property.did = o.getString("did");
-//            property.siid = o.getInt("siid");
-//            property.piid = o.getInt("piid");
-//            property.value = o.getInt("value");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return property;
-//    }
-//
-//    public JSONObject encodeGetPropertyResponse() {
-//        JSONObject o = new JSONObject();
-//        o = toJSON(o);
-//        if (this.status == 0) {
-//            try {
-//                o.put("value", this.value);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            try {
-//                o.put("description", this.description);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        return o;
-//    }
-//
-//    public JSONObject encodeSetPropertyResponse() {
-//        JSONObject o = new JSONObject();
-//        o = toJSON(o);
-//        if (this.status != 0) {
-//            try {
-//                o.put("description", this.description);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        return o;
-//    }
-//
-//    private JSONObject toJSON(JSONObject o) {
-//        try {
-//            o.put("did", this.did);
-//            o.put("siid", this.siid);
-//            o.put("piid", this.piid);
-//            o.put("status", this.status);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return o;
-//    }
-    }
 }
 

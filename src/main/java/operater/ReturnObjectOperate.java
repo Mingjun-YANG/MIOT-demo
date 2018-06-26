@@ -4,9 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ReturnObjectOperate {
+class ReturnObjectOperate {
 
-    public static JSONObject fillReturnObject(JSONArray list, String name, String requestId, String intent) {
+    static JSONObject fillReturnObject(JSONArray list, String name, String requestId, String intent) {
         JSONObject objReturn = new JSONObject();
 
         try {

@@ -62,6 +62,19 @@ class ResponseOperater {
         }
         return objectReturn;
     }
+    static JSONObject fillPropertyResponse(int i, int j, JSONObject property,JSONArray idArray) throws JSONException {
+        JSONObject objectReturn = new JSONObject();
+        switch (i) {
+            case 0:
+                objectReturn.put("value", property.get("value"));
+                objectReturn.put("did", idArray.getJSONObject(j).getInt("did"));
+                objectReturn.put("piid", idArray.getJSONObject(j).getInt("iid"));
+                objectReturn.put("siid", idArray.getJSONObject(j).getInt("siid"));
+                objectReturn.put("status", 0);
+                return objectReturn;
+        }
+        return objectReturn;
+    }
 
     static JSONObject fillResponse(int i, int j, JSONArray idArray, String subscribeId) throws JSONException {
         JSONObject objectReturn = new JSONObject();

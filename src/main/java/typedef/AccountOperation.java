@@ -6,7 +6,6 @@ import org.json.JSONObject;
 public class AccountOperation extends AbstractOperation {
     public String token;
 
-    // 功能ID
     public String uid;
 
     public static AccountOperation decodeGetAccount(JSONObject o) {

@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class IntentSwitcher {
@@ -56,13 +57,11 @@ public class IntentSwitcher {
                     return intentOperater.onGetStatus(response, requestId, intent, uid, context);
                 }
                 break;
-//            default:
-//                response.setStatus(400);
-//                PrintWriter out = response.getWriter();
-//                out.println("intent is invalid");
-//                break;
-//        }
-
+            default:
+                response.setStatus(400);
+                PrintWriter out = response.getWriter();
+                out.println("intent is invalid");
+                break;
         }
         return null;
     }

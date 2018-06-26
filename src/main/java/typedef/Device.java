@@ -13,7 +13,7 @@ public class Device {
         return type;
     }
 
-    public void setDid(String did) {
+    void setDid(String did) {
         this.did = did;
     }
 

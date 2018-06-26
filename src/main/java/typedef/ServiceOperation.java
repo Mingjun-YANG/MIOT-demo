@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceOperation extends AbstractOperation {
+public class ServiceOperation {
 
     public JSONArray properties = new JSONArray();
 

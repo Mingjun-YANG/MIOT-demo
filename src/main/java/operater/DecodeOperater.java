@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DecodeOperater {
+class DecodeOperater {
 
     static List<DeviceOwnerOperation> decodeGetDevice(String uid) throws JSONException {
 

@@ -5,9 +5,9 @@ import org.json.JSONObject;
 
 public class GetStatusRequestOperation {
 
-    public String did;
+    private String did;
 
-    public String status;
+    private String status;
 
     public static GetStatusRequestOperation decodeGetStatusRequest(JSONObject object) {
         GetStatusRequestOperation decodeGetStatusRequest = new GetStatusRequestOperation();
