@@ -135,8 +135,6 @@ class IntentOperater {
 
     }
 
-    //
-//
     List<JSONObject> onSetProperties(HttpServletResponse response, String requestId, String intent, String uid, JSONObject context) throws JSONException {
         List<DeviceOwnerOperation> list = DecodeOperater.decodeGetDevice(uid);
 

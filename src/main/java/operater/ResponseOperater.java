@@ -62,7 +62,8 @@ class ResponseOperater {
         }
         return objectReturn;
     }
-    static JSONObject fillPropertyResponse(int i, int j, JSONObject property,JSONArray idArray) throws JSONException {
+
+    static JSONObject fillPropertyResponse(int i, int j, JSONObject property, JSONArray idArray) throws JSONException {
         JSONObject objectReturn = new JSONObject();
         switch (i) {
             case 0:

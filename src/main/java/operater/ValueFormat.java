@@ -13,7 +13,7 @@ public class ValueFormat {
         boolTrueSet.add("open");
     }
 
-    public static int toInteger(Object value) {
+    static int toInteger(Object value) {
         int result = 0;
         if (value instanceof String) {
             result = Integer.valueOf((String) value);
@@ -35,7 +35,7 @@ public class ValueFormat {
         return result;
     }
 
-    public static Float toFloat(Object value) {
+    static Float toFloat(Object value) {
         Float result = 0.0F;
         if (value instanceof String) {
             result = Float.valueOf((String) value);
@@ -56,7 +56,7 @@ public class ValueFormat {
         return result;
     }
 
-    public static Object converter(String st) {
+    static Object converter(String st) {
         Object result = 0;
         if (st.equals("uint8") || st.equals("uint16") || st.equals("uint32")) {
             result = 1;
