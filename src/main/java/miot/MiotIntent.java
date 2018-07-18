@@ -8,7 +8,7 @@ public enum MiotIntent {
     SET_PROPERTIES("set-properties"),
     INVOKE_ACTION("invoke-action"),
     SUBSCRIBE("subscribe"),
-    UNSUBSCRIBE("unscribe"),
+    UNSUBSCRIBE("unsubscribe"),
     GET_DEVICE_STATUS("get-device-status");
 
 
