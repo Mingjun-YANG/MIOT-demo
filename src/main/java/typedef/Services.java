@@ -4,7 +4,7 @@ import org.json.JSONArray;
 
 public class Services {
 
-    private String siid;
+    private int siid;
 
     private String type;
 
@@ -12,11 +12,13 @@ public class Services {
 
     private JSONArray properties;
 
-    public String getSiid() {
+    private JSONArray actions;
+
+    public int getSiid() {
         return siid;
     }
 
-    public void setSiid(String siid) {
+    public void setSiid(int siid) {
         this.siid = siid;
     }
 
@@ -42,5 +44,13 @@ public class Services {
 
     public JSONArray getProperties() {
         return properties;
+    }
+
+    public JSONArray getActions() {
+        return actions;
+    }
+
+    public void setActions(JSONArray actions) {
+        this.actions = actions;
     }
 }

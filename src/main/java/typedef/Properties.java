@@ -1,17 +1,25 @@
 package typedef;
 
 
+import org.json.JSONArray;
+
 public class Properties {
 
-    private String iid;
+    private int iid;
 
     private String type;
 
     private String description;
 
-    private String value;
+    private Object value;
 
     private String format;
+
+    private JSONArray access;
+
+    private JSONArray value_range;
+
+    private String unit;
 
     public void setDescription(String description) {
         this.description = description;
@@ -25,11 +33,11 @@ public class Properties {
         this.format = format;
     }
 
-    public void setIid(String iid) {
+    public void setIid(int iid) {
         this.iid = iid;
     }
 
-    public void setValue(String value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 
@@ -45,12 +53,35 @@ public class Properties {
         return format;
     }
 
-    public String getIid() {
+    public int getIid() {
         return iid;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
+    public JSONArray getAccess() {
+        return access;
+    }
+
+    public void setAccess(JSONArray access) {
+        this.access = access;
+    }
+
+    public JSONArray getValue_range() {
+        return value_range;
+    }
+
+    public void setValue_range(JSONArray value_range) {
+        this.value_range = value_range;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
 }
