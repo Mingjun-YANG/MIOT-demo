@@ -1,10 +1,9 @@
 package miot.impl;
 
 import miot.Request;
-import typedef.ActionRequest;
-import typedef.GetStatusRequest;
-import typedef.PropertyRequest;
 import org.json.JSONObject;
+import typedef.ActionRequest;
+import typedef.PropertyRequest;
 import typedef.SubscribeRequest;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class RequestImpl implements Request {
 
-    public List<PropertyRequest> getPropertyRequest (JSONObject context) {
+    public List<PropertyRequest> getPropertyRequest(JSONObject context) {
         List<PropertyRequest> list = new ArrayList<>();
         for (int i = 0; i < context.optJSONArray("properties").length(); i++) {
             PropertyRequest propertyRequest = new PropertyRequest();
@@ -24,7 +23,7 @@ public class RequestImpl implements Request {
         return list;
     }
 
-    public List<PropertyRequest> setPropertyRequest (JSONObject context) {
+    public List<PropertyRequest> setPropertyRequest(JSONObject context) {
         List<PropertyRequest> list = new ArrayList<>();
         for (int i = 0; i < context.optJSONArray("properties").length(); i++) {
             PropertyRequest propertyRequest = new PropertyRequest();
@@ -37,7 +36,7 @@ public class RequestImpl implements Request {
         return list;
     }
 
-    public List<ActionRequest> excecuteActionRequest (JSONObject context ){
+    public List<ActionRequest> excecuteActionRequest(JSONObject context) {
         List<ActionRequest> list = new ArrayList<>();
         for (int i = 0; i < context.optJSONArray("action").length(); i++) {
             ActionRequest actionRequest = new ActionRequest();
@@ -51,17 +50,16 @@ public class RequestImpl implements Request {
     }
 
 
-    public List<SubscribeRequest> subscribeRequest (JSONObject context) {
+    public List<SubscribeRequest> subscribeRequest(JSONObject context) {
         List<SubscribeRequest> list = new ArrayList<>();
         for (int i = 0; i < context.optJSONArray("devices").length(); i++) {
             SubscribeRequest subscribeRequest = new SubscribeRequest();
-            subscribeRequest.setDid(context.optJSONArray("action").optJSONObject(i).optString("did"));
-            subscribeRequest.setSubscriptionId(context.optJSONArray("action").optJSONObject(i).optString("subscriptionId"));
+            subscribeRequest.setDid(context.optJSONArray("devices").optJSONObject(i).optString("did"));
+            subscribeRequest.setSubscriptionId(context.optJSONArray("devices").optJSONObject(i).optString("subscriptionId"));
             list.add(subscribeRequest);
         }
         return list;
     }
-
 
 
 }

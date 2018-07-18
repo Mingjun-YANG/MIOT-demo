@@ -15,7 +15,7 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
     private JSONObject json;
 
     @Override
-    public String getUid(String token){
+    public String getUid(String token) {
         DatabaseOperater reader = new DatabaseOperater();
         String string = reader.databaseReader("account");
         try {
@@ -25,8 +25,8 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
         }
 
         JSONArray array = json.optJSONArray("db");
-        for(int i = 0; i < array.length(); i++) {
-            if(array.optJSONObject(i).optString("token").equals(token)) {
+        for (int i = 0; i < array.length(); i++) {
+            if (array.optJSONObject(i).optString("token").equals(token)) {
                 return array.optJSONObject(i).optString("uid");
             }
         }
@@ -41,8 +41,8 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
         JSONObject json = new JSONObject(string);
         JSONArray array = json.getJSONArray("db");
         List<Device> list = new ArrayList<>();
-        for(int i = 0; i < array.length(); i++) {
-            if(array.getJSONObject(i).getString("uid").equals(uid)) {
+        for (int i = 0; i < array.length(); i++) {
+            if (array.getJSONObject(i).getString("uid").equals(uid)) {
                 Device device = new Device();
                 device.setType(array.getJSONObject(i).getJSONArray("devices").getJSONObject(0).getString("type"));
                 device.setDid(array.getJSONObject(i).getJSONArray("devices").getJSONObject(0).getString("did"));
@@ -103,7 +103,7 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
     @Override
     public List<Actions> getActions(Services service) throws JSONException {
         List<Actions> list = new ArrayList<>();
-        for (int i = 0; i < service.getProperties().length(); i++) {
+        for (int i = 0; i < service.getActions().length(); i++) {
             Actions action = new Actions();
             action.setIid(service.getActions().optJSONObject(i).optInt("iid"));
             action.setType(service.getActions().optJSONObject(i).optString("type"));

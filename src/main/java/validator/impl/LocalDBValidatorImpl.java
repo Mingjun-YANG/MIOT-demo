@@ -1,6 +1,5 @@
 package validator.impl;
 
-import db.DeviceDB;
 import db.impl.DeviceDBLocalJsonImpl;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class LocalDBValidatorImpl {
 
-    public boolean deviceRequestValidator (String requestDid, String uid) {
+    public boolean deviceRequestValidator(String requestDid, String uid) {
         boolean flag = true;
         DeviceDBLocalJsonImpl deviceDB = new DeviceDBLocalJsonImpl();
         try {
@@ -28,30 +27,29 @@ public class LocalDBValidatorImpl {
         return flag;
     }
 
-    public String tokenValidator (String token) {
+    public String tokenValidator(String token) {
         DeviceDBLocalJsonImpl deviceDB = new DeviceDBLocalJsonImpl();
         return deviceDB.getUid(token);
     }
 
-    public boolean serviceRequestValidator (Instance instance, int requestSiid) {
+    public boolean serviceRequestValidator(Instance instance, int requestSiid) {
         return instance.getServices().length() >= requestSiid && requestSiid >= 0;
     }
 
-    public boolean propertyRequestValidator (Services services, int requestPiid) {
+    public boolean propertyRequestValidator(Services services, int requestPiid) {
         return services.getProperties().length() >= requestPiid && requestPiid >= 0;
     }
 
-    public boolean actionRequestValidator (Services services, int requestAiid) {
+    public boolean actionRequestValidator(Services services, int requestAiid) {
         return services.getActions().length() >= requestAiid && requestAiid >= 0;
     }
 
-    public boolean subscribeRequestValidator (Instance instance, String subscribeId) {
+    public boolean subscribeRequestValidator(Instance instance, String subscribeId) {
         return instance.getSubscriptionId().equals(subscribeId);
     }
 
 
-
-    public boolean valueRangeValidator (JSONArray valueRange, Object value, String valueFormat) throws JSONException {
+    public boolean valueRangeValidator(JSONArray valueRange, Object value, String valueFormat) throws JSONException {
         switch (valueFormat) {
             case "bool":
                 return value.equals(true) || value.equals(false);
@@ -63,12 +61,12 @@ public class LocalDBValidatorImpl {
                 int pace = valueRange.getInt(2);
                 return (int) value <= high && (int) value >= low;
 
-                default:
-                    return false;
+            default:
+                return false;
         }
     }
 
-    public boolean valueFormatValidator (String valueFormat, Object value){
+    public boolean valueFormatValidator(String valueFormat, Object value) {
         switch (valueFormat) {
             case "bool":
                 return value.toString().equals("true") || value.toString().equals("false");
@@ -85,11 +83,11 @@ public class LocalDBValidatorImpl {
         }
     }
 
-    public boolean writeAccessValidator (JSONArray access) {
+    public boolean writeAccessValidator(JSONArray access) {
         return access.toString().contains("write");
     }
 
-    public boolean readAccessValidator (JSONArray access) {
+    public boolean readAccessValidator(JSONArray access) {
         return access.toString().contains("read");
     }
 

@@ -5,7 +5,7 @@ public enum MiotIntent {
     UNDEFINED("undefined"),
     GET_DEVICES("get-devices"),
     GET_PROPERTIES("get-properties"),
-    SET_PROPERTIES("set-devices"),
+    SET_PROPERTIES("set-properties"),
     INVOKE_ACTION("invoke-action"),
     SUBSCRIBE("subscribe"),
     UNSUBSCRIBE("unscribe"),

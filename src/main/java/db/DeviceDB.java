@@ -1,21 +1,12 @@
 package db;
 
-import db.impl.DeviceDBLocalJsonImpl;
 import org.json.JSONException;
-import org.json.JSONObject;
 import typedef.*;
 
 import java.util.List;
 
 public interface DeviceDB {
 
-//    static DeviceDB create(JSONObject config) {
-//        if (config.getXXXX() == XXX) {
-//            return new DeviceDBLocalJsonImpl();
-//        }
-//
-//        return new DeviceDBMySqlImpl();
-//    }
 
     List<Device> getDevices(String uid) throws JSONException;
 

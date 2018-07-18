@@ -18,9 +18,13 @@ public class MiotRequest {
         return requestId;
     }
 
-    public MiotIntent getIntent() { return intent; }
+    public MiotIntent getIntent() {
+        return intent;
+    }
 
-    public void setIntent(MiotIntent intent) { this.intent = intent; }
+    public void setIntent(MiotIntent intent) {
+        this.intent = intent;
+    }
 
     public void setToken(String token) {
         this.token = token;

@@ -1,13 +1,6 @@
-
-import java.io.IOException;
-import java.util.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import db.impl.DeviceDBLocalJsonImpl;
 import miot.MiotRequest;
 import miot.MiotRequestCodec;
-
 import miot.Response;
 import miot.impl.RequestImpl;
 import miot.impl.ResponseImpl;
@@ -17,8 +10,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import typedef.*;
-import typedef.Properties;
 import validator.impl.LocalDBValidatorImpl;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 public class ServiceHandler extends AbstractHandler {
 
@@ -30,9 +27,9 @@ public class ServiceHandler extends AbstractHandler {
     private JSONObject context;
 
 
-    private void onGetDevices(MiotRequest req) throws JSONException{
+    private void onGetDevices(MiotRequest req) throws JSONException {
         String uid = deviceDB.getUid(req.getToken());
-        List<Device> list =  deviceDB.getDevices(uid);
+        List<Device> list = deviceDB.getDevices(uid);
         JSONArray deviceArray = new JSONArray();
         list.forEach(Device -> {
 
@@ -59,7 +56,7 @@ public class ServiceHandler extends AbstractHandler {
         list.forEach(PropertyRequest -> {
             if (validator.deviceRequestValidator(PropertyRequest.getDid(), uid)) {
                 try {
-                propertiesArray.put(responseFiller.deviceNotFoundResponse(PropertyRequest));
+                    propertiesArray.put(responseFiller.deviceNotFoundResponse(PropertyRequest));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -68,7 +65,7 @@ public class ServiceHandler extends AbstractHandler {
 
             try {
                 Instance instance = deviceDB.getInstance(PropertyRequest.getDid());
-                if (validator.serviceRequestValidator(instance, PropertyRequest.getSiid())){
+                if (!validator.serviceRequestValidator(instance, PropertyRequest.getSiid())) {
                     try {
                         propertiesArray.put(responseFiller.serviceNotFoundResponse(PropertyRequest));
                     } catch (JSONException e) {
@@ -82,7 +79,7 @@ public class ServiceHandler extends AbstractHandler {
 
                     if (Services.getSiid() == (PropertyRequest.getSiid())) {
 
-                        if (validator.propertyRequestValidator(Services, PropertyRequest.getPiid())){
+                        if (!validator.propertyRequestValidator(Services, PropertyRequest.getPiid())) {
                             try {
                                 propertiesArray.put(responseFiller.propertyNotFoundResponse(PropertyRequest));
                             } catch (JSONException e) {
@@ -138,7 +135,7 @@ public class ServiceHandler extends AbstractHandler {
 
             try {
                 Instance instance = deviceDB.getInstance(PropertyRequest.getDid());
-                if (validator.serviceRequestValidator(instance, PropertyRequest.getSiid())){
+                if (!validator.serviceRequestValidator(instance, PropertyRequest.getSiid())) {
                     try {
                         propertiesArray.put(responseFiller.serviceNotFoundResponse(PropertyRequest));
                     } catch (JSONException e) {
@@ -152,7 +149,7 @@ public class ServiceHandler extends AbstractHandler {
 
                     if (Services.getSiid() == (PropertyRequest.getSiid())) {
 
-                        if (validator.propertyRequestValidator(Services, PropertyRequest.getPiid())){
+                        if (!validator.propertyRequestValidator(Services, PropertyRequest.getPiid())) {
                             try {
                                 propertiesArray.put(responseFiller.propertyNotFoundResponse(PropertyRequest));
                             } catch (JSONException e) {
@@ -166,7 +163,7 @@ public class ServiceHandler extends AbstractHandler {
                             properties.forEach(Properties -> {
 
                                 if (Properties.getIid() == (PropertyRequest.getPiid())) {
-                                    if (validator.valueFormatValidator(Properties.getFormat(), PropertyRequest.getValue())) {
+                                    if (!validator.valueFormatValidator(Properties.getFormat(), PropertyRequest.getValue())) {
                                         try {
                                             propertiesArray.put(responseFiller.propertyInvalidFormatResponse(PropertyRequest));
                                         } catch (JSONException e) {
@@ -176,7 +173,7 @@ public class ServiceHandler extends AbstractHandler {
                                     }
                                     if (PropertyRequest.getValue() instanceof Float || PropertyRequest.getValue() instanceof Integer) {
                                         try {
-                                            if (validator.valueRangeValidator(Properties.getValue_range(), PropertyRequest.getValue(), Properties.getFormat())) {
+                                            if (!validator.valueRangeValidator(Properties.getValue_range(), PropertyRequest.getValue(), Properties.getFormat())) {
                                                 try {
                                                     propertiesArray.put(responseFiller.propertyValueOutRangeResponse(PropertyRequest));
                                                 } catch (JSONException e) {
@@ -188,7 +185,7 @@ public class ServiceHandler extends AbstractHandler {
                                             e.printStackTrace();
                                         }
                                     }
-                                    if (validator.writeAccessValidator(Properties.getAccess())) {
+                                    if (!validator.writeAccessValidator(Properties.getAccess())) {
                                         try {
                                             propertiesArray.put(responseFiller.propertyNotWriteableResponse(PropertyRequest));
                                         } catch (JSONException e) {
@@ -238,7 +235,7 @@ public class ServiceHandler extends AbstractHandler {
 
             try {
                 Instance instance = deviceDB.getInstance(ActionRequest.getDid());
-                if (validator.serviceRequestValidator(instance, ActionRequest.getSiid())){
+                if (!validator.serviceRequestValidator(instance, ActionRequest.getSiid())) {
                     try {
                         actionsArray.put(responseFiller.serviceNotFoundResponse(ActionRequest));
                     } catch (JSONException e) {
@@ -251,7 +248,7 @@ public class ServiceHandler extends AbstractHandler {
 
                     if (Services.getSiid() == (ActionRequest.getSiid())) {
 
-                        if (validator.actionRequestValidator(Services, ActionRequest.getAiid())){
+                        if (!validator.actionRequestValidator(Services, ActionRequest.getAiid())) {
                             try {
                                 actionsArray.put(responseFiller.actionNotFoundResponse(ActionRequest));
                             } catch (JSONException e) {
@@ -307,7 +304,7 @@ public class ServiceHandler extends AbstractHandler {
 
             try {
                 Instance instance = deviceDB.getInstance(SubscribeRequest.getDid());
-                if (validator.subscribeRequestValidator(instance, SubscribeRequest.getSubscriptionId())){
+                if (validator.subscribeRequestValidator(instance, SubscribeRequest.getSubscriptionId())) {
                     try {
                         subscribeArray.put(responseFiller.subscribeIdInvalidResponse(SubscribeRequest));
                     } catch (JSONException e) {
@@ -338,7 +335,7 @@ public class ServiceHandler extends AbstractHandler {
             return;
         }
 
-        for (int i = 0; i < devices.length() ; i++) {
+        for (int i = 0; i < devices.length(); i++) {
             String did = devices.optString(i);
             if (validator.deviceRequestValidator(did, uid)) {
                 try {
@@ -355,7 +352,6 @@ public class ServiceHandler extends AbstractHandler {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                    return;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -374,7 +370,7 @@ public class ServiceHandler extends AbstractHandler {
             case GET_DEVICES:
                 try {
                     onGetDevices(req);
-                } catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 break;
