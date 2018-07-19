@@ -82,7 +82,7 @@ public class ResponseImpl implements Response {
     public JSONObject actionNotFoundResponse(ActionRequest actionRequest) throws JSONException {
         JSONObject actionObject = new JSONObject();
         actionObject.put("status", -5);
-        actionObject.put("piid", actionRequest.getAiid());
+        actionObject.put("aiid", actionRequest.getAiid());
         actionObject.put("siid", actionRequest.getSiid());
         actionObject.put("did", actionRequest.getDid());
         actionObject.put("description", "action not found");
@@ -154,7 +154,7 @@ public class ResponseImpl implements Response {
 
     public JSONObject actionExcecutedResponse(ActionRequest actionRequest, Actions actions) throws JSONException {
         JSONObject actionObject = new JSONObject();
-        actionObject.put("piid", actionRequest.getAiid());
+        actionObject.put("aiid", actionRequest.getAiid());
         actionObject.put("siid", actionRequest.getSiid());
         actionObject.put("did", actionRequest.getDid());
         actionObject.put("status", 0);

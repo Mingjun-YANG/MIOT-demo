@@ -14,7 +14,6 @@ import typedef.ActionRequest;
 import typedef.Device;
 import typedef.PropertyRequest;
 import typedef.SubscribeRequest;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class ServiceHandler extends AbstractHandler {
     private RequestOperaterImpl requestOperater = new RequestOperaterImpl();
 
 
-    private void onGetDevices(MiotRequest req) {
+    private JSONObject onGetDevices(MiotRequest req) throws JSONException{
         String uid = deviceDB.getUid(req.getToken());
         List<Device> list = deviceDB.getDevices(uid);
         JSONArray deviceArray = new JSONArray();
@@ -44,6 +43,7 @@ public class ServiceHandler extends AbstractHandler {
                 e.printStackTrace();
             }
         });
+        return responseFiller.fillStatusResponse(deviceArray, req);
     }
 
     private JSONObject onGetProperties(MiotRequest req, JSONObject context) throws JSONException {
@@ -121,7 +121,11 @@ public class ServiceHandler extends AbstractHandler {
         response.setStatus(200);
         switch (req.getIntent()) {
             case GET_DEVICES:
-                onGetDevices(req);
+                try {
+                    out.println(onGetDevices(req));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case GET_PROPERTIES:
                 try {
