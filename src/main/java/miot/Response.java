@@ -1,5 +1,6 @@
 package miot;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import typedef.*;
@@ -41,5 +42,15 @@ public interface Response {
     JSONObject subscribeExcecutedResponse(SubscribeRequest subscribeRequest) throws JSONException;
 
     JSONObject getStatusResponse(String did, String status, String name) throws JSONException;
+
+    JSONObject fillPropertyResponse(JSONArray propertyArray, MiotRequest req) throws JSONException;
+
+    JSONObject fillActionResponse(JSONArray actionArray, MiotRequest req) throws JSONException;
+
+    JSONObject fillSubscribeResponse(JSONArray subscribeArray, MiotRequest req) throws JSONException;
+
+    JSONObject fillStatusResponse(JSONArray deviceStatusArray, MiotRequest req) throws JSONException;
+
+    JSONObject tokenInvalidResponse(MiotRequest req) throws JSONException;
 
 }

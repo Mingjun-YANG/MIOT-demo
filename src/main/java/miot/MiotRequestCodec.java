@@ -10,7 +10,7 @@ import java.io.IOException;
 public class MiotRequestCodec {
 
 
-    public static MiotRequest decode(HttpServletRequest request, JSONObject context) throws IOException {
+    public static MiotRequest decode(HttpServletRequest request, JSONObject context) {
         MiotRequest miotRequest = new MiotRequest();
 
         miotRequest.setIntent(MiotIntent.from(context.optString("intent")));

@@ -1,6 +1,8 @@
 package miot.impl;
 
+import miot.MiotRequest;
 import miot.Response;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import typedef.*;
@@ -79,11 +81,11 @@ public class ResponseImpl implements Response {
 
     public JSONObject actionNotFoundResponse(ActionRequest actionRequest) throws JSONException {
         JSONObject actionObject = new JSONObject();
-        actionObject.put("status", -4);
+        actionObject.put("status", -5);
         actionObject.put("piid", actionRequest.getAiid());
         actionObject.put("siid", actionRequest.getSiid());
         actionObject.put("did", actionRequest.getDid());
-        actionObject.put("description", "property not found");
+        actionObject.put("description", "action not found");
         return actionObject;
     }
 
@@ -130,7 +132,7 @@ public class ResponseImpl implements Response {
 
     public JSONObject propertyNotReadableResponse(PropertyRequest propertyRequest) throws JSONException {
         JSONObject propertyObject = new JSONObject();
-        propertyObject.put("status", -10);
+        propertyObject.put("status", -8);
         propertyObject.put("piid", propertyRequest.getPiid());
         propertyObject.put("siid", propertyRequest.getSiid());
         propertyObject.put("did", propertyRequest.getDid());
@@ -141,7 +143,7 @@ public class ResponseImpl implements Response {
 
     public JSONObject propertyNotWriteableResponse(PropertyRequest propertyRequest) throws JSONException {
         JSONObject propertyObject = new JSONObject();
-        propertyObject.put("status", -10);
+        propertyObject.put("status", -9);
         propertyObject.put("piid", propertyRequest.getPiid());
         propertyObject.put("siid", propertyRequest.getSiid());
         propertyObject.put("did", propertyRequest.getDid());
@@ -188,4 +190,46 @@ public class ResponseImpl implements Response {
         return statusObject;
     }
 
+
+    public JSONObject fillPropertyResponse(JSONArray propertyArray, MiotRequest req) throws JSONException {
+        JSONObject responseObject = new JSONObject();
+        responseObject.put("properties", propertyArray);
+        responseObject.put("requestId", req.getRequestId());
+        responseObject.put("intent", req.getIntent().toString());
+        return responseObject;
+    }
+
+    public JSONObject tokenInvalidResponse(MiotRequest req) throws JSONException {
+        JSONObject responseObject = new JSONObject();
+        responseObject.put("token", req.getToken());
+        responseObject.put("requestId", req.getRequestId());
+        responseObject.put("intent", req.getIntent().toString());
+        responseObject.put("description", "token is invalid");
+
+        return responseObject;
+    }
+
+    public JSONObject fillActionResponse(JSONArray actionArray, MiotRequest req) throws JSONException {
+        JSONObject responseObject = new JSONObject();
+        responseObject.put("action", actionArray);
+        responseObject.put("requestId", req.getRequestId());
+        responseObject.put("intent", req.getIntent().toString());
+        return responseObject;
+    }
+
+    public JSONObject fillSubscribeResponse(JSONArray subscribeArray, MiotRequest req) throws JSONException {
+        JSONObject responseObject = new JSONObject();
+        responseObject.put("devices", subscribeArray);
+        responseObject.put("requestId", req.getRequestId());
+        responseObject.put("intent", req.getIntent().toString());
+        return responseObject;
+    }
+
+    public JSONObject fillStatusResponse(JSONArray deviceStatusArray, MiotRequest req) throws JSONException {
+        JSONObject responseObject = new JSONObject();
+        responseObject.put("devices", deviceStatusArray);
+        responseObject.put("requestId", req.getRequestId());
+        responseObject.put("intent", req.getIntent().toString());
+        return responseObject;
+    }
 }

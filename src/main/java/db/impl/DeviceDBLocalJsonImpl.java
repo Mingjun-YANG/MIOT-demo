@@ -35,17 +35,22 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
 
 
     @Override
-    public List<Device> getDevices(String uid) throws JSONException {
+    public List<Device> getDevices(String uid) {
         DatabaseOperater reader = new DatabaseOperater();
         String string = reader.databaseReader("devices");
-        JSONObject json = new JSONObject(string);
-        JSONArray array = json.getJSONArray("db");
+        JSONObject json = null;
+        try {
+            json = new JSONObject(string);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JSONArray array = json.optJSONArray("db");
         List<Device> list = new ArrayList<>();
         for (int i = 0; i < array.length(); i++) {
-            if (array.getJSONObject(i).getString("uid").equals(uid)) {
+            if (array.optJSONObject(i).optString("uid").equals(uid)) {
                 Device device = new Device();
-                device.setType(array.getJSONObject(i).getJSONArray("devices").getJSONObject(0).getString("type"));
-                device.setDid(array.getJSONObject(i).getJSONArray("devices").getJSONObject(0).getString("did"));
+                device.setType(array.optJSONObject(i).optJSONArray("devices").optJSONObject(0).optString("type"));
+                device.setDid(array.optJSONObject(i).optJSONArray("devices").optJSONObject(0).optString("did"));
                 list.add(device);
             }
         }
@@ -53,10 +58,15 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
     }
 
     @Override
-    public Instance getInstance(String did) throws JSONException {
+    public Instance getInstance(String did) {
         DatabaseOperater reader = new DatabaseOperater();
         String string = reader.databaseReader(did);
-        JSONObject json = new JSONObject(string);
+        JSONObject json = null;
+        try {
+            json = new JSONObject(string);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         Instance instance = new Instance();
         instance.setType(json.optString("type"));
         instance.setDescription(json.optString("description"));
@@ -68,7 +78,7 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
     }
 
     @Override
-    public List<Services> getServices(Instance instance) throws JSONException {
+    public List<Services> getServices(Instance instance) {
         List<Services> list = new ArrayList<>();
         for (int i = 0; i < instance.getServices().length(); i++) {
             Services services = new Services();
@@ -83,7 +93,7 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
     }
 
     @Override
-    public List<Properties> getProperties(Services service) throws JSONException {
+    public List<Properties> getProperties(Services service) {
         List<Properties> list = new ArrayList<>();
         for (int i = 0; i < service.getProperties().length(); i++) {
             Properties property = new Properties();
@@ -101,7 +111,7 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
     }
 
     @Override
-    public List<Actions> getActions(Services service) throws JSONException {
+    public List<Actions> getActions(Services service) {
         List<Actions> list = new ArrayList<>();
         for (int i = 0; i < service.getActions().length(); i++) {
             Actions action = new Actions();

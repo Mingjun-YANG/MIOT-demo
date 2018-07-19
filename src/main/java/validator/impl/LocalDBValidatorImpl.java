@@ -2,7 +2,6 @@ package validator.impl;
 
 import db.impl.DeviceDBLocalJsonImpl;
 import org.json.JSONArray;
-import org.json.JSONException;
 import typedef.Device;
 import typedef.Instance;
 import typedef.Services;
@@ -14,15 +13,11 @@ public class LocalDBValidatorImpl {
     public boolean deviceRequestValidator(String requestDid, String uid) {
         boolean flag = true;
         DeviceDBLocalJsonImpl deviceDB = new DeviceDBLocalJsonImpl();
-        try {
-            List<Device> list = deviceDB.getDevices(uid);
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).toString().contains(requestDid)) {
-                    flag = false;
-                }
+        List<Device> list = deviceDB.getDevices(uid);
+        for (Device aList : list) {
+            if (aList.toString().contains(requestDid)) {
+                flag = false;
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
         return flag;
     }
@@ -49,16 +44,16 @@ public class LocalDBValidatorImpl {
     }
 
 
-    public boolean valueRangeValidator(JSONArray valueRange, Object value, String valueFormat) throws JSONException {
+    public boolean valueRangeValidator(JSONArray valueRange, Object value, String valueFormat) {
         switch (valueFormat) {
             case "bool":
                 return value.equals(true) || value.equals(false);
             case "uint8":
             case "uint16":
             case "uint32":
-                int low = valueRange.getInt(0);
-                int high = valueRange.getInt(1);
-                int pace = valueRange.getInt(2);
+                int low = valueRange.optInt(0);
+                int high = valueRange.optInt(1);
+                int pace = valueRange.optInt(2);
                 return (int) value <= high && (int) value >= low;
 
             default:
