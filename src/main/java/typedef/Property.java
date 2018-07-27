@@ -3,7 +3,7 @@ package typedef;
 
 import org.json.JSONArray;
 
-public class Properties {
+public class Property {
 
     private int iid;
 

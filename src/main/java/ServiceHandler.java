@@ -1,34 +1,45 @@
 import db.impl.DeviceDBLocalJsonImpl;
-import miot.MiotRequest;
-import miot.MiotRequestCodec;
-import miot.Response;
-import miot.impl.RequestImpl;
-import miot.impl.ResponseImpl;
+import exeception.MyExeception;
+import miot.*;
+import miot.impl.DecodeRequestImpl;
+import miot.impl.EncodeResponseImpl;
+import miot.request.*;
 import operater.impl.RequestOperaterImpl;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import typedef.ActionRequest;
-import typedef.Device;
-import typedef.PropertyRequest;
-import typedef.SubscribeRequest;
+import typedef.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 public class ServiceHandler extends AbstractHandler {
 
     private DeviceDBLocalJsonImpl deviceDB = new DeviceDBLocalJsonImpl();
-    private Response responseFiller = new ResponseImpl();
-    private RequestImpl request = new RequestImpl();
+    private EncodeResponse encodeResponse = new EncodeResponseImpl();
+    private DecodeRequest decodeRequest = new DecodeRequestImpl();
     private RequestOperaterImpl requestOperater = new RequestOperaterImpl();
 
+    private void getUserId(MiotRequest req){
+        try {
+            req.setUid(deviceDB.getUid(req.getToken()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-    private JSONObject onGetDevices(MiotRequest req) throws JSONException{
+    /**
+     * {
+     *     "requestId": "xxxx",
+     *     "intent": "get-devices",
+     * }
+     */
+
+    private MiotResponse onGetDevices(MiotRequest req) throws Exception{
         String uid = deviceDB.getUid(req.getToken());
         List<Device> list = deviceDB.getDevices(uid);
         JSONArray deviceArray = new JSONArray();
@@ -43,130 +54,198 @@ public class ServiceHandler extends AbstractHandler {
                 e.printStackTrace();
             }
         });
-        return responseFiller.fillStatusResponse(deviceArray, req);
+        MiotResponse response = new MiotResponse();
+        response.setCode(200);
+        response.setResponseBody(encodeResponse.fillStatusResponse(deviceArray, req));
+        return response;
     }
 
-    private JSONObject onGetProperties(MiotRequest req, JSONObject context) throws JSONException {
-        List<PropertyRequest> list = request.getPropertyRequest(context);
+    /**
+     * {
+     *     "requestId": "xxxx",
+     *     "intent": "get-properties",
+     *     "properties": [
+     *        {
+     *            "did": "xxx",
+     *            "siid": "xxxx",
+     *            "piid": "xxxx",
+     *        }
+     *     ]
+     * }
+     */
 
+    private MiotResponse onGetProperties(MiotRequest req) throws Exception {
+        MiotGetPropertiesRequest miotGetPropertiesRequest = (MiotGetPropertiesRequest) req;
+        List<PropertyRequest> list = decodeRequest.decodeGetPropertyRequest(miotGetPropertiesRequest);
         String uid = deviceDB.getUid(req.getToken());
-        if (uid.equals("NOTFOUND")) {
-            return responseFiller.tokenInvalidResponse(req);
-        }
-
-        return responseFiller.fillPropertyResponse(requestOperater.propertyRequestOperater(list, req), req);
-
-
+        JSONArray array = requestOperater.getProperties(uid, list);
+        MiotResponse response = new MiotResponse();
+        response.setCode(200);
+        response.setResponseBody(encodeResponse.fillPropertyResponse(array, req));
+        return response;
     }
 
-    private JSONObject onSetProperties(MiotRequest req, JSONObject context) throws JSONException {
+    /**
+     * {
+     *     "requestId": "xxxx",
+     *     "intent": "set-properties",
+     *     "properties": [
+     *        {
+     *            "did": "xxx",
+     *            "siid": "xxxx",
+     *            "piid": "xxxx",
+     *            "value": xx
+     *        }
+     *     ]
+     * }
+     */
 
-        List<PropertyRequest> list = request.setPropertyRequest(context);
-
+    private MiotResponse onSetProperties(MiotRequest req) throws Exception {
+        MiotSetPropertiesRequest miotSetPropertiesRequest = (MiotSetPropertiesRequest) req;
+        List<PropertyRequest> list = decodeRequest.decodeSetPropertyRequest(miotSetPropertiesRequest);
         String uid = deviceDB.getUid(req.getToken());
-        if (uid.equals("NOTFOUND")) {
-            return responseFiller.tokenInvalidResponse(req);
-        }
-
-        return responseFiller.fillPropertyResponse(requestOperater.propertyRequestOperater(list, req), req);
+        JSONArray array = requestOperater.setProperties(uid, list);
+        MiotResponse response = new MiotResponse();
+        response.setCode(200);
+        response.setResponseBody(encodeResponse.fillPropertyResponse(array, req));
+        return response;
 
     }
 
-    private JSONObject onExcecuteActions(MiotRequest req, JSONObject context) throws JSONException {
+    /**
+     * {
+     *     "requestId": "xxxx",
+     *     "intent": "invoke-action",
+     *     "properties": [
+     *        {
+     *            "did": "xxx",
+     *            "siid": "xxxx",
+     *            "aiid": "xxxx",
+     *            "in":[xx,xx]
+     *        }
+     *     ]
+     * }
+     */
 
-        List<ActionRequest> list = request.excecuteActionRequest(context);
-
+    private MiotResponse onExcecuteActions(MiotRequest req) throws Exception {
+        MiotActionRequest miotActionRequest = (MiotActionRequest) req;
+        List<ActionRequest> list = decodeRequest.decodeActionRequest(miotActionRequest);
         String uid = deviceDB.getUid(req.getToken());
-        if (uid.equals("NOTFOUND")) {
-            return responseFiller.tokenInvalidResponse(req);
-        }
-
-        return responseFiller.fillActionResponse(requestOperater.actionRequestOperater(list, req), req);
-
+        JSONArray array = requestOperater.actionRequestOperater(uid,list);
+        MiotResponse response = new MiotResponse();
+        response.setCode(200);
+        response.setResponseBody(encodeResponse.fillActionResponse(array, req));
+        return response;
     }
 
-    private JSONObject onSubscribe(MiotRequest req, JSONObject context) throws JSONException {
+    /**
+     * {
+     *     "requestId": "xxxx",
+     *     "intent": "subscribe",
+     *     "devices": [
+     *        {
+     *            "did": "xxx",
+     *            "subscriptionId": "xxxx"
+     *        }
+     *     ]
+     * }
+     */
 
-        List<SubscribeRequest> list = request.subscribeRequest(context);
-
+    private MiotResponse onSubscribe(MiotRequest req) throws Exception{
+        MiotSubscribeRequest miotSubscribeRequest = (MiotSubscribeRequest) req;
+        List<SubscribeRequest> list = decodeRequest.decodeSubscribeRequest(miotSubscribeRequest);
         String uid = deviceDB.getUid(req.getToken());
-        if (uid.equals("NOTFOUND")) {
-            return responseFiller.tokenInvalidResponse(req);
-        }
-
-        return responseFiller.fillSubscribeResponse(requestOperater.subscribeRequestOperater(list, req), req);
-
+        JSONArray array = requestOperater.subscribeRequestOperater(uid,list);
+        MiotResponse response = new MiotResponse();
+        response.setCode(200);
+        response.setResponseBody(encodeResponse.fillSubscribeResponse(array, req));
+        return response;
     }
 
-    private JSONObject onGetStatus(MiotRequest req, JSONObject context) throws JSONException {
+    /**
+     * {
+     *     "requestId": "xxxx",
+     *     "intent": "get-device-status",
+     *     "devices": ["xxxx", "xxxx"]
+     * }
+     */
 
-        JSONArray devices = context.optJSONArray("devices");
-
+    private MiotResponse onGetStatus(MiotRequest req) throws Exception {
+        MiotGetStatusRequest miotGetStatusRequest = (MiotGetStatusRequest) req;
+        List<StatusRequest> list = decodeRequest.decodeStatusRequest(miotGetStatusRequest);
         String uid = deviceDB.getUid(req.getToken());
-        if (uid.equals("NOTFOUND")) {
-            return responseFiller.tokenInvalidResponse(req);
-        }
-
-        return responseFiller.fillStatusResponse(requestOperater.deviceStatusRequestOperater(devices, req), req);
+        JSONArray array = requestOperater.deviceStatusRequestOperater(uid, list);
+        MiotResponse response = new MiotResponse();
+        response.setCode(200);
+        response.setResponseBody(encodeResponse.fillStatusResponse(array, req));
+        return response;
     }
+
+    private MiotResponse execute(MiotRequest req) throws Exception{
+        int status = 200;
+        MiotResponse response = new MiotResponse();
+        JSONObject resultObject = new JSONObject();
+
+        try {
+            getUserId(req);
+
+            switch (req.getIntent()) {
+                case GET_DEVICES:
+                    return onGetDevices(req);
+
+                case GET_PROPERTIES:
+                    return onGetProperties(req);
+
+                case SET_PROPERTIES:
+                    return onSetProperties(req);
+
+                case SUBSCRIBE:
+                case UNSUBSCRIBE:
+                    return onSubscribe(req);
+
+                case INVOKE_ACTION:
+                    return onExcecuteActions(req);
+
+                case GET_DEVICE_STATUS:
+                    return onGetStatus(req);
+
+                default:
+                    status = 404;
+                    resultObject.put("Description", "Not Found");
+                    response.setCode(status);
+                    response.setResponseBody(resultObject);
+            }
+        } catch (JSONException e) {
+            status = 503;
+            resultObject.put("Description", "Service unavaliable");
+        } catch (MyExeception e) {
+//            status = e.getHttpStatus();
+            // e.getCode();
+            // e.getMessage();
+        } finally {
+            response.setCode(status);
+            response.setResponseBody(resultObject);
+        }
+        return response;
+    }
+
 
     @Override
     public void handle(String target,
                        Request baseRequest,
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException {
-        PrintWriter out = response.getWriter();
         JSONObject context = MiotRequestCodec.bodyReader(request);
         MiotRequest req = MiotRequestCodec.decode(request, context);
-        response.setStatus(200);
-        switch (req.getIntent()) {
-            case GET_DEVICES:
-                try {
-                    out.println(onGetDevices(req));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case GET_PROPERTIES:
-                try {
-                    out.println(onGetProperties(req, context));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case SET_PROPERTIES:
-                try {
-                    out.println(onSetProperties(req, context));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case SUBSCRIBE:
-            case UNSUBSCRIBE:
-                try {
-                    out.println(onSubscribe(req, context));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case INVOKE_ACTION:
-                try {
-                    out.println(onExcecuteActions(req, context));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case GET_DEVICE_STATUS:
-                try {
-                    out.println(onGetStatus(req, context));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            default:
-                break;
+        MiotResponse resp = null;
+        try {
+            resp = execute(req);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        response.getWriter().println(resp.getResponseBody().toString());
+        response.setStatus(resp.getCode());
+
         baseRequest.setHandled(true);
     }
-
 }

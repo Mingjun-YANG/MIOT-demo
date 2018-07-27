@@ -6,16 +6,15 @@ import java.util.List;
 
 public interface DeviceDB {
 
+    List<Device> getDevices(String uid) throws Exception;
 
-    List<Device> getDevices(String uid);
-
-    Instance getInstance(String did);
+    Instance getInstance(String did) throws Exception;
 
     List<Services> getServices(Instance instance);
 
-    List<Properties> getProperties(Services service);
+    List<Property> getProperties(Services service);
 
     List<Actions> getActions(Services service);
 
-    String getUid(String token);
+    String getUid(String token) throws Exception;
 }

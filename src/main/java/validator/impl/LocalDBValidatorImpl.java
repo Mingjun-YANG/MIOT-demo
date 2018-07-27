@@ -2,6 +2,7 @@ package validator.impl;
 
 import db.impl.DeviceDBLocalJsonImpl;
 import org.json.JSONArray;
+import org.json.JSONException;
 import typedef.Device;
 import typedef.Instance;
 import typedef.Services;
@@ -13,7 +14,13 @@ public class LocalDBValidatorImpl {
     public boolean deviceRequestValidator(String requestDid, String uid) {
         boolean flag = true;
         DeviceDBLocalJsonImpl deviceDB = new DeviceDBLocalJsonImpl();
-        List<Device> list = deviceDB.getDevices(uid);
+        List<Device> list = null;
+        try {
+            list = deviceDB.getDevices(uid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         for (Device aList : list) {
             if (aList.toString().contains(requestDid)) {
                 flag = false;
@@ -22,10 +29,6 @@ public class LocalDBValidatorImpl {
         return flag;
     }
 
-    public String tokenValidator(String token) {
-        DeviceDBLocalJsonImpl deviceDB = new DeviceDBLocalJsonImpl();
-        return deviceDB.getUid(token);
-    }
 
     public boolean serviceRequestValidator(Instance instance, int requestSiid) {
         return instance.getServices().length() >= requestSiid && requestSiid >= 0;

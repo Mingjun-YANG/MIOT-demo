@@ -1,22 +1,25 @@
 package operater;
 
-import miot.MiotRequest;
 import org.json.JSONArray;
 import typedef.ActionRequest;
 import typedef.PropertyRequest;
+import typedef.StatusRequest;
 import typedef.SubscribeRequest;
 
 import java.util.List;
 
 public interface RequestOperater {
 
-    JSONArray actionRequestOperater(List<ActionRequest> list, MiotRequest req);
+    JSONArray actionRequestOperater(String uid, List<ActionRequest> list);
 
-    JSONArray subscribeRequestOperater(List<SubscribeRequest> list, MiotRequest req);
+    JSONArray subscribeRequestOperater(String uid, List<SubscribeRequest> list);
 
-    JSONArray deviceStatusRequestOperater(JSONArray devices, MiotRequest req);
+    JSONArray deviceStatusRequestOperater(String uid, List<StatusRequest> list);
 
-    JSONArray propertyRequestOperater(List<PropertyRequest> list, MiotRequest req);
+    JSONArray setProperties(String uid, List<PropertyRequest> list) throws Exception;
+
+    JSONArray getProperties(String uid, List<PropertyRequest> list) throws Exception;
+
 
 
 }

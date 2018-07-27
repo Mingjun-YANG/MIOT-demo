@@ -14,8 +14,10 @@ public class DatabaseOperater {
         } else {
             Path = "db/device/" + fileName + ".json";
         }
+
         BufferedReader reader = null;
         String laststr = "";
+
         try {
             FileInputStream fileInputStream = new FileInputStream(Path);
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
@@ -38,5 +40,4 @@ public class DatabaseOperater {
         }
         return laststr;
     }
-
 }

@@ -20,8 +20,7 @@ public interface Validator {
 
     boolean valueFormatValidator(String valueFormat, Object value);
 
-    boolean writeAccessValidator(JSONArray access);
+    boolean isWritable(JSONArray access);
 
-    boolean readAccessValidator(JSONArray access);
-
+    boolean isReadable(JSONArray access);
 }

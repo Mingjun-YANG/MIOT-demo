@@ -15,14 +15,11 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
     private JSONObject json;
 
     @Override
-    public String getUid(String token) {
+    public String getUid(String token) throws Exception {
         DatabaseOperater reader = new DatabaseOperater();
         String string = reader.databaseReader("account");
-        try {
-            json = new JSONObject(string);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+        json = new JSONObject(string);
 
         JSONArray array = json.optJSONArray("db");
         for (int i = 0; i < array.length(); i++) {
@@ -30,20 +27,16 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
                 return array.optJSONObject(i).optString("uid");
             }
         }
+
         return "NOTFOUND";
     }
 
-
     @Override
-    public List<Device> getDevices(String uid) {
+    public List<Device> getDevices(String uid) throws JSONException {
         DatabaseOperater reader = new DatabaseOperater();
         String string = reader.databaseReader("devices");
-        JSONObject json = null;
-        try {
-            json = new JSONObject(string);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject json = new JSONObject(string);
+
         JSONArray array = json.optJSONArray("db");
         List<Device> list = new ArrayList<>();
         for (int i = 0; i < array.length(); i++) {
@@ -54,19 +47,15 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
                 list.add(device);
             }
         }
+
         return list;
     }
 
     @Override
-    public Instance getInstance(String did) {
+    public Instance getInstance(String did) throws JSONException {
         DatabaseOperater reader = new DatabaseOperater();
         String string = reader.databaseReader(did);
-        JSONObject json = null;
-        try {
-            json = new JSONObject(string);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject json = new JSONObject(string);
         Instance instance = new Instance();
         instance.setType(json.optString("type"));
         instance.setDescription(json.optString("description"));
@@ -74,6 +63,7 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
         instance.setSubscriptionId(json.optString("subscriptionId"));
         instance.setCustomized_services(json.optJSONArray("custonized-services"));
         instance.setServices(json.optJSONArray("services"));
+
         return instance;
     }
 
@@ -89,14 +79,15 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
             services.setActions(instance.getServices().optJSONObject(i).optJSONArray("actions"));
             list.add(services);
         }
+
         return list;
     }
 
     @Override
-    public List<Properties> getProperties(Services service) {
-        List<Properties> list = new ArrayList<>();
+    public List<Property> getProperties(Services service) {
+        List<Property> list = new ArrayList<>();
         for (int i = 0; i < service.getProperties().length(); i++) {
-            Properties property = new Properties();
+            Property property = new Property();
             property.setIid(service.getProperties().optJSONObject(i).optInt("iid"));
             property.setType(service.getProperties().optJSONObject(i).optString("type"));
             property.setFormat(service.getProperties().optJSONObject(i).optString("format"));
@@ -107,6 +98,7 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
             property.setUnit(service.getProperties().optJSONObject(i).optString("unit"));
             list.add(property);
         }
+
         return list;
     }
 
@@ -122,7 +114,7 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
             action.setOut(service.getActions().optJSONObject(i).optJSONArray("out"));
             list.add(action);
         }
+
         return list;
     }
-
 }

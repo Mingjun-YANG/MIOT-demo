@@ -1,13 +1,13 @@
 package miot.impl;
 
-import miot.MiotRequest;
-import miot.Response;
+import miot.EncodeResponse;
+import miot.request.MiotRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import typedef.*;
 
-public class ResponseImpl implements Response {
+public class EncodeResponseImpl implements EncodeResponse {
 
     public JSONObject deviceNotFoundResponse(PropertyRequest propertyRequest) throws JSONException {
         JSONObject propertyObject = new JSONObject();
@@ -89,7 +89,7 @@ public class ResponseImpl implements Response {
         return actionObject;
     }
 
-    public JSONObject propertyGetResponse(PropertyRequest propertyRequest, Properties properties) throws JSONException {
+    public JSONObject propertyGetResponse(PropertyRequest propertyRequest, Property properties) throws JSONException {
         JSONObject propertyObject = new JSONObject();
         propertyObject.put("status", 0);
         propertyObject.put("piid", propertyRequest.getPiid());

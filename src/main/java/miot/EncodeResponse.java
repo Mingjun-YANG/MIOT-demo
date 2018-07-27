@@ -1,11 +1,12 @@
 package miot;
 
+import miot.request.MiotRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import typedef.*;
 
-public interface Response {
+public interface EncodeResponse {
 
     JSONObject deviceNotFoundResponse(PropertyRequest propertyObject) throws JSONException;
 
@@ -23,7 +24,7 @@ public interface Response {
 
     JSONObject actionNotFoundResponse(ActionRequest actionRequest) throws JSONException;
 
-    JSONObject propertyGetResponse(PropertyRequest propertyRequest, Properties properties) throws JSONException;
+    JSONObject propertyGetResponse(PropertyRequest propertyRequest, Property properties) throws JSONException;
 
     JSONObject propertySetResponse(PropertyRequest propertyRequest) throws JSONException;
 

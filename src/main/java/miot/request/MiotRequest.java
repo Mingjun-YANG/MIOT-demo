@@ -1,5 +1,7 @@
-package miot;
+package miot.request;
 
+
+import miot.MiotIntent;
 
 public class MiotRequest {
 
@@ -7,8 +9,9 @@ public class MiotRequest {
 
     private String requestId;
 
-    private MiotIntent intent;
+    private String uid;
 
+    private MiotIntent intent;
 
     public String getToken() {
         return token;
@@ -34,5 +37,11 @@ public class MiotRequest {
         this.requestId = requestId;
     }
 
+    public String getUid() {
+        return uid;
+    }
 
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 }
