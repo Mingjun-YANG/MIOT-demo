@@ -1,0 +1,14 @@
+{
+  "requestId": "xxxx",
+  "intent": "subscribe",
+  "devices": [
+    {
+      "did": "10001",
+      "subscriptionId": "123456"
+    },
+    {
+      "did": "10002",
+      "subscriptionId": "123456"
+    }
+  ]
+}

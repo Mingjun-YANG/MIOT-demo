@@ -1,0 +1,5 @@
+{
+  "requestId": "xxxx",
+  "intent": "get-device-status",
+  "devices": ["10001", "10002", "10003"]
+}

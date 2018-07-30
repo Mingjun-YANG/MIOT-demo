@@ -1,0 +1,12 @@
+{
+    "requestId": "xxxx",
+    "intent": "invoke-action",
+    "action": [
+        {
+            "did": "10003",
+            "siid": 2,
+            "aiid": 1,
+            "in": [5, "weak"]
+        }
+    ]
+}

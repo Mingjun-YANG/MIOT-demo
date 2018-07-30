@@ -23,8 +23,8 @@
 * 请求（MIOT -> 第三方云）
 
   ```http
-  POST /miot-api
-  User-Token: qiurqoiuryoxkjkjixfjf
+  POST /com.xiaomi.iot.example.miot-api
+  User-Token: imaxiaomilover
   Content-Type: application/json
   Content-Length: 97
 
@@ -48,11 +48,11 @@
       "devices": [
           {
               "did": "10001",
-              "type": "urn:miot-spec-v2:device:light:0000A001:mocklight:1",
+              "type": "urn:com.xiaomi.iot.example.miot-spec-v2:device:light:0000A001:mocklight:1",
           },
           {
               "did": "10002",
-              "type": "urn:miot-spec-v2:device:outlet:0000A002:mockoutlet:1",
+              "type": "urn:com.xiaomi.iot.example.miot-spec-v2:device:outlet:0000A002:mockoutlet:1",
           }
       ]
   }
@@ -72,7 +72,7 @@
 * 请求（MIOT -> 第三方云）
 
   ```http
-  POST /miot-api
+  POST /com.xiaomi.iot.example.miot-api
   User-Token: imaxiaomilover
   Content-Type: application/json
   Content-Length: 243
@@ -158,7 +158,7 @@
 * 请求（MIOT -> 第三方云）
 
   ```http
-  POST /miot-api
+  POST /com.xiaomi.iot.example.miot-api
   User-Token: imaxiaomilover
   Content-Type: application/json
   Content-Length: 267
@@ -250,7 +250,7 @@
 * 请求（MIOT -> 第三方云）
 
   ```http
-  POST /miot-api
+  POST /com.xiaomi.iot.example.miot-api
   User-Token: imaxiaomilover
   Content-Type: application/json
   Content-Length: 267
@@ -338,7 +338,7 @@
 * 请求（MIOT -> 第三方云）
 
   ```json
-  POST /miot-api
+  POST /com.xiaomi.iot.example.miot-api
   User-Token: imaxiaomilover
   Content-Type: application/json
   Content-Length: 173
@@ -369,10 +369,10 @@
   {
     "devices": [
         {
-            "description": "invalid subscriptionId",
+            "description": "device not found",
             "subscriptionId": "123456",
             "did": "10001",
-            "status": -16
+            "status": -1
         },
         {
             "subscriptionId": "123456",
@@ -390,7 +390,7 @@
 * 请求（MIOT -> 第三方云）
 
   ```json
-  POST /miot-api
+  POST /com.xiaomi.iot.example.miot-api
   User-Token: imaxiaomilover
   Content-Type: application/json
   Content-Length: 173
@@ -424,11 +424,13 @@
       "devices": [
           {
               "did": "AAAA",
-              "subscriptionId": "zzzz"
+              "subscriptionId": "zzzz",
+              "status": 0
           },
           {
               "did": "AAAA",
               "subscriptionId": "123456"
+              "status": 0
           }
       ]
   }
@@ -442,7 +444,7 @@
 * 请求（MIOT -> 第三方云）
 
   ```http
-  POST /miot-api
+  POST /com.xiaomi.iot.example.miot-api
   User-Token: imaxiaomilover
   Content-Type: application/jsonContent-Type
   Content-Length: 97
@@ -450,7 +452,7 @@
   {
       "requestId": "xxxx",
       "intent": "get-device-status",
-      "devices": ["10001", "10002"]
+      "devices": ["10001", "10002", "10003"]
   }
   ```
 
@@ -464,15 +466,21 @@
   {
     "devices": [
         {
-            "name": "urn:miot-spec-v2:device:light:0000A001:mocklight:1",
+            "name": "urn:com.xiaomi.iot.example.miot-spec-v2:device:light:0000A001:mocklight:1",
             "online": "true",
             "did": "10001",
             "status": 0
         },
         {
-            "name": "urn:miot-spec-v2:device:outlet:0000A002:mockoutlet:1",
+            "name": "urn:com.xiaomi.iot.example.miot-spec-v2:device:outlet:0000A002:mockoutlet:1",
             "online": "false",
             "did": "10002",
+            "status": 0
+        },
+        {
+            "name":"urn:miot-spec-v2:device:light:0000A001:mockcandle:1",
+            "online": "true",
+            "did": "10003",
             "status": 0
         }
     ],
@@ -518,7 +526,7 @@
     或：
 
     ```json
-    POST /miot/event
+    POST /com.xiaomi.iot.example.miot/event
     Content-Type: application/json
     Content-Length: 267
 

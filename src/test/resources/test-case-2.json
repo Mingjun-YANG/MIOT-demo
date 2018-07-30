@@ -1,0 +1,21 @@
+{
+  "requestId": "xxxx",
+  "intent": "get-properties",
+  "properties": [
+    {
+      "did": "10002",
+      "siid": 20,
+      "piid": 1
+    },
+    {
+      "did": "10003",
+      "siid": 1,
+      "piid": 3
+    },
+    {
+      "did": "10003",
+      "siid": 1,
+      "piid": 8
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{"requestId":"xxxx","action":[{"siid":2,"aiid":1,"did":"10003","status":0,"out":[100,"strong"]}],"intent":"invoke-action"}

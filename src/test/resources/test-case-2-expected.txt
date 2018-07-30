@@ -1,0 +1,1 @@
+{"requestId":"xxxx","intent":"get-properties","properties":[{"piid":1,"siid":20,"description":"service not found","did":"10002","status":-2},{"piid":3,"siid":1,"value":"01010111","did":"10003","status":0},{"piid":8,"siid":1,"description":"property not found","did":"10003","status":-3}]}
