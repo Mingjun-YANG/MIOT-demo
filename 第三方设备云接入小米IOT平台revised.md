@@ -47,12 +47,12 @@
       "intent": "get-devices",
       "devices": [
           {
-              "did": "10001",
+              "did": "10002",
               "type": "urn:com.xiaomi.iot.example.miot-spec-v2:device:light:0000A001:mocklight:1",
           },
           {
-              "did": "10002",
-              "type": "urn:com.xiaomi.iot.example.miot-spec-v2:device:outlet:0000A002:mockoutlet:1",
+              "did": "10003",
+              "type": "urn:miot-spec-v2:device:light:0000A001:mockcandle:1",
           }
       ]
   }
@@ -464,28 +464,27 @@
   Content-Length: 312
 
   {
-    "devices": [
-        {
-            "name": "urn:com.xiaomi.iot.example.miot-spec-v2:device:light:0000A001:mocklight:1",
-            "online": "true",
-            "did": "10001",
-            "status": 0
-        },
-        {
-            "name": "urn:com.xiaomi.iot.example.miot-spec-v2:device:outlet:0000A002:mockoutlet:1",
-            "online": "false",
-            "did": "10002",
-            "status": 0
-        },
-        {
-            "name":"urn:miot-spec-v2:device:light:0000A001:mockcandle:1",
-            "online": "true",
-            "did": "10003",
-            "status": 0
-        }
-    ],
-    "requestId": "xxxx",
-    "intent": "get-device-status"
+      "devices": [
+          {
+              "description": "device not found",
+              "did": "10001",
+              "status": -1
+          },
+          {
+              "name": "urn:miot-spec-v2:device:outlet:0000A002:mockoutlet:1",
+              "online": "false",
+              "did": "10002",
+              "status": 0
+          },
+          {
+              "name": "urn:miot-spec-v2:device:light:0000A001:mockcandle:1",
+              "online": "true",
+              "did": "10003",
+              "status": 0
+          }
+      ],
+      "requestId": "xxxx",
+      "intent": "get-device-status"
   }
   ```
 
