@@ -1,1 +1,0 @@
-{"devices":[{"subscriptionId":"zzzz","did":"10003","status":0},{"subscriptionId":"123456","did":"10002","status":0}],"requestId":"xxxx","intent":"unsubscribe"}

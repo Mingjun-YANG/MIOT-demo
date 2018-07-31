@@ -1,1 +1,0 @@
-{"devices":[{"type":"urn:miot-spec-v2:device:outlet:0000A002:mockoutlet:1","did":"10002"},{"type":"urn:miot-spec-v2:device:light:0000A001:mockcandle:1","did":"10003"}],"requestId":"xxxx","intent":"get-devices"}

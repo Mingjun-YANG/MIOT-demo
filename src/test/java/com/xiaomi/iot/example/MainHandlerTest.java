@@ -8,6 +8,8 @@ import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.server.Server;
 import org.junit.Assert;
 import org.junit.Test;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -34,13 +36,17 @@ public class MainHandlerTest {
 
         for (int i = 0; i < 7; i++) {
             ContentResponse response = sendTestRequest(httpClient, i);
-            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("test-case-" + i + "-expected.txt");
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("test-case-" + i + "-expected.json");
             String expected = IOUtils.toString(resourceAsStream, Charset.defaultCharset());
 
             System.out.println("Test" + i + " - Expected response: " + expected);
             System.out.println("Test" + i + " - Actual response: " + response.getContentAsString());
 
-            Assert.assertTrue(response.getContentAsString().equals(expected));
+            JsonParser jsonParser = new JsonParser();
+            JsonObject responseObject = (JsonObject) jsonParser.parse(response.getContentAsString());
+            JsonObject expectedObject = (JsonObject) jsonParser.parse(expected);
+
+            Assert.assertEquals(responseObject, expectedObject);
 
         }
 
@@ -50,7 +56,8 @@ public class MainHandlerTest {
 
         InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("test-case-invalid-token-expected.txt");
         String expected = IOUtils.toString(resourceAsStream, Charset.defaultCharset());
-        Assert.assertTrue(response.getContentAsString().equals(expected));
+
+        Assert.assertEquals(response.getContentAsString(), expected);
     }
 
     private ContentResponse sendTestRequest(HttpClient httpClient, int i) throws IOException, InterruptedException, ExecutionException, TimeoutException {
@@ -60,14 +67,12 @@ public class MainHandlerTest {
 
         System.out.println("Test" + i + " - Request: " + string);
 
-        ContentResponse response =  httpClient.newRequest("localhost",9880)
+        return httpClient.newRequest("localhost",9880)
                 .method(HttpMethod.POST)
                 .header("User_Token", "imaxiaomilover")
                 .header("Content-Type", "application/json")
                 .content(stringContentProvider, "application/json")
                 .send();
-
-        return response;
     }
 
     private ContentResponse sendInvalidTokenRequest (HttpClient httpClient) throws IOException, InterruptedException, ExecutionException, TimeoutException {
@@ -76,13 +81,14 @@ public class MainHandlerTest {
         String string = IOUtils.toString(resourceAsStream, Charset.defaultCharset());
         StringContentProvider stringContentProvider = new StringContentProvider("application/json", string, Charset.defaultCharset());
 
-        ContentResponse response = httpClient.newRequest("localhost",9880)
+        return httpClient.newRequest("localhost",9880)
                 .method(HttpMethod.POST)
                 .header("User_Token", "THIS-IS-NOT-A-VALID-TOKEN")
                 .header("Content-Type", "application/json")
                 .content(stringContentProvider, "application/json")
                 .send();
-
-        return response;
     }
+
+
+
 }
