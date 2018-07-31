@@ -1,6 +1,7 @@
 package com.xiaomi.iot.example.db.impl;
 
 import com.xiaomi.iot.example.db.DeviceDB;
+import com.xiaomi.iot.example.exeception.MyException;
 import com.xiaomi.iot.example.operater.DatabaseOperater;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +28,7 @@ public class DeviceDBLocalJsonImpl implements DeviceDB {
             }
         }
 
-        return "NOTFOUND";
+        throw new MyException(200, "Token invalid");
     }
 
     @Override

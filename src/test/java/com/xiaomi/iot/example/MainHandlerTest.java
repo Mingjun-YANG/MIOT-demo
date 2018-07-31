@@ -24,7 +24,8 @@ public class MainHandlerTest {
 
         runClient();
 
-//        server.join();
+        server.stop();
+
     }
 
     private void runClient() throws Exception {
@@ -35,24 +36,53 @@ public class MainHandlerTest {
             ContentResponse response = sendTestRequest(httpClient, i);
             InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("test-case-" + i + "-expected.txt");
             String expected = IOUtils.toString(resourceAsStream, Charset.defaultCharset());
+
             System.out.println("Test" + i + " - Expected response: " + expected);
             System.out.println("Test" + i + " - Actual response: " + response.getContentAsString());
+
             Assert.assertTrue(response.getContentAsString().equals(expected));
+
         }
 
+        System.out.println("Test 7 - Request with a invalid token");
+
+        ContentResponse response = sendInvalidTokenRequest(httpClient);
+
+        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("test-case-invalid-token-expected.txt");
+        String expected = IOUtils.toString(resourceAsStream, Charset.defaultCharset());
+        Assert.assertTrue(response.getContentAsString().equals(expected));
     }
 
     private ContentResponse sendTestRequest(HttpClient httpClient, int i) throws IOException, InterruptedException, ExecutionException, TimeoutException {
         InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("./test-case-"+ i +".json");
         String string = IOUtils.toString(resourceAsStream, Charset.defaultCharset());
         StringContentProvider stringContentProvider = new StringContentProvider("application/json", string, Charset.defaultCharset());
+
         System.out.println("Test" + i + " - Request: " + string);
+
         ContentResponse response =  httpClient.newRequest("localhost",9880)
                 .method(HttpMethod.POST)
                 .header("User_Token", "imaxiaomilover")
                 .header("Content-Type", "application/json")
                 .content(stringContentProvider, "application/json")
                 .send();
+
+        return response;
+    }
+
+    private ContentResponse sendInvalidTokenRequest (HttpClient httpClient) throws IOException, InterruptedException, ExecutionException, TimeoutException {
+
+        InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("test-case-0.json");
+        String string = IOUtils.toString(resourceAsStream, Charset.defaultCharset());
+        StringContentProvider stringContentProvider = new StringContentProvider("application/json", string, Charset.defaultCharset());
+
+        ContentResponse response = httpClient.newRequest("localhost",9880)
+                .method(HttpMethod.POST)
+                .header("User_Token", "THIS-IS-NOT-A-VALID-TOKEN")
+                .header("Content-Type", "application/json")
+                .content(stringContentProvider, "application/json")
+                .send();
+
         return response;
     }
 }

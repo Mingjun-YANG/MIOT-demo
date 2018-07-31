@@ -2,6 +2,7 @@ package com.xiaomi.iot.example;
 
 import com.xiaomi.iot.example.db.impl.DeviceDBLocalJsonImpl;
 //import com.xiaomi.iot.example.exeception.MyException;
+import com.xiaomi.iot.example.exeception.MyException;
 import com.xiaomi.iot.example.miot.*;
 import com.xiaomi.iot.example.miot.impl.DecodeRequestImpl;
 import com.xiaomi.iot.example.miot.impl.EncodeResponseImpl;
@@ -51,17 +52,6 @@ public class ServiceHandler extends AbstractHandler {
             deviceObject.put("did", device.getDid());
             deviceArray.put(deviceObject);
         }
-
-//        list.forEach(device -> {
-//            JSONObject deviceObject = new JSONObject();
-//            try {
-//                deviceObject.put("type", device.getType());
-//                deviceObject.put("did", device.getDid());
-//                deviceArray.put(deviceObject);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        });
 
         MiotResponse response = new MiotResponse();
         response.setCode(200);
@@ -188,7 +178,7 @@ public class ServiceHandler extends AbstractHandler {
     }
 
     private MiotResponse execute(MiotRequest req) throws Exception {
-        int status = 200;
+        int status;
         MiotResponse response = new MiotResponse();
         JSONObject resultObject = new JSONObject();
 
@@ -215,7 +205,6 @@ public class ServiceHandler extends AbstractHandler {
                 return onGetStatus(req);
 
             default:
-//                throw new MyException(500, 0, "xxxx");
                 status = 404;
                 resultObject.put("Description", "Not Found");
                 response.setCode(status);
@@ -235,30 +224,30 @@ public class ServiceHandler extends AbstractHandler {
         MiotRequest req = MiotRequestCodec.decode(request, context);
         MiotResponse resp = null;
 
+        int status = 404;
+        String body = new String();
+
         try {
             resp = execute(req);
+
+            status = resp.getCode();
+            body = resp.getResponseBody().toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            if (e instanceof MyException) {
+                MyException ee = (MyException) e;
+
+                status = ee.getHttpStatus();
+                body = ee.getMessage();
+
+            }
+            if (e instanceof NullPointerException) {
+                 status = 500;
+                 body = e.getMessage();
+            }
+        } finally {
+            response.getWriter().println(body);
+            response.setStatus(status);
         }
-
-
-
-//                (MyException | NullPointerException e) {
-//            e.printStackTrace();
-//
-//            if (e instanceof MyException) {
-//                MyException ee = (MyException) e;
-//                status = ee.getHttpStatus();
-//            }
-//            if (e instanceof NullPointerException) {
-//                // status = 500;
-//                // body = e.printStackTrace();
-//            }
-//        }
-
-        response.getWriter().println(resp.getResponseBody().toString());
-        response.setStatus(resp.getCode());
-
         baseRequest.setHandled(true);
     }
 }

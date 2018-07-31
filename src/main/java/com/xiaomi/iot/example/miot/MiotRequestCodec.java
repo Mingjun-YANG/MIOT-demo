@@ -24,14 +24,18 @@ public class MiotRequestCodec {
                 getPropertiesRequest.setRequestId(context.optString("requestId"));
                 getPropertiesRequest.setToken(request.getHeader("User_Token"));
                 getPropertiesRequest.setProperties(context.optJSONArray("properties"));
+
                 return getPropertiesRequest;
+
             case SET_PROPERTIES:
                 MiotSetPropertiesRequest setPropertiesRequest = new MiotSetPropertiesRequest();
                 setPropertiesRequest.setIntent(intent);
                 setPropertiesRequest.setRequestId(context.optString("requestId"));
                 setPropertiesRequest.setToken(request.getHeader("User_Token"));
                 setPropertiesRequest.setProperties(context.optJSONArray("properties"));
+
                 return setPropertiesRequest;
+
             case SUBSCRIBE:
             case UNSUBSCRIBE:
                 MiotSubscribeRequest subscribeRequest = new MiotSubscribeRequest();
@@ -39,21 +43,27 @@ public class MiotRequestCodec {
                 subscribeRequest.setRequestId(context.optString("requestId"));
                 subscribeRequest.setToken(request.getHeader("User_Token"));
                 subscribeRequest.setDevices(context.optJSONArray("devices"));
+
                 return subscribeRequest;
+
             case INVOKE_ACTION:
                 MiotActionRequest actionRequest = new MiotActionRequest();
                 actionRequest.setIntent(intent);
                 actionRequest.setRequestId(context.optString("requestId"));
                 actionRequest.setToken(request.getHeader("User_Token"));
                 actionRequest.setAction(context.optJSONArray("action"));
+
                 return actionRequest;
+
             case GET_DEVICE_STATUS:
                 MiotGetStatusRequest getStatusRequest = new MiotGetStatusRequest();
                 getStatusRequest.setIntent(intent);
                 getStatusRequest.setRequestId(context.optString("requestId"));
                 getStatusRequest.setToken(request.getHeader("User_Token"));
                 getStatusRequest.setDevices(context.optJSONArray("devices"));
+
                 return getStatusRequest;
+
             case GET_DEVICES:
                 MiotGetDevicesRequest getDevicesRequest = new MiotGetDevicesRequest();
                 getDevicesRequest.setIntent(intent);
